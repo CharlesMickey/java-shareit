@@ -8,4 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(path = "/bookings")
-public class BookingController {}
+public class BookingController {
+
+}
