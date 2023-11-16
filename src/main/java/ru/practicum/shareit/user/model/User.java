@@ -1,11 +1,10 @@
 package ru.practicum.shareit.user.model;
 
-import lombok.Builder;
-import lombok.Data;
-import org.springframework.validation.annotation.Validated;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+
+import lombok.*;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * TODO Sprint add-controllers.
@@ -13,7 +12,8 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @Validated
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     private int id;

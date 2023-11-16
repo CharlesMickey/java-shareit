@@ -1,7 +1,11 @@
 package ru.practicum.shareit.item.model;
 
-import lombok.Builder;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.model.User;
@@ -11,7 +15,8 @@ import ru.practicum.shareit.user.model.User;
  */
 @Data
 @Validated
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Item {
 
     private int id;
@@ -20,7 +25,11 @@ public class Item {
 
     private String description;
 
-    private boolean available;
+    @NotNull
+    @Pattern(
+            regexp = "^true$|^false$",
+            message = "Available может быть онли: true or false")
+    private Boolean available;
 
     private User owner;
 

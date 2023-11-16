@@ -1,8 +1,8 @@
 package ru.practicum.shareit.request;
 
-import ru.practicum.shareit.user.model.User;
-
 import java.time.LocalDate;
+
+import ru.practicum.shareit.user.model.User;
 
 /**
  * TODO Sprint add-item-requests.
