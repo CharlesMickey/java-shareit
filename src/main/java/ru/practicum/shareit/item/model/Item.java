@@ -1,8 +1,5 @@
 package ru.practicum.shareit.item.model;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

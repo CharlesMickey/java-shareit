@@ -8,7 +8,6 @@ import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.validated.Create;
 import ru.practicum.shareit.validated.Update;
 
-
 @Data
 @Validated
 @NoArgsConstructor
