@@ -10,9 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
-/**
- * TODO Sprint add-controllers.
- */
+
 @Data
 @Validated
 @NoArgsConstructor
@@ -25,10 +23,6 @@ public class Item {
 
     private String description;
 
-    @NotNull
-    @Pattern(
-            regexp = "^true$|^false$",
-            message = "Available может быть онли: true or false")
     private Boolean available;
 
     private User owner;

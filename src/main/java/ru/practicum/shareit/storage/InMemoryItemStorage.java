@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.item.model.Item;
 
 @Component
-public class InMemoryItemStorage implements ItemDaoStorage<Item> {
+public class InMemoryItemStorage implements ItemDaoStorage {
 
     private final HashMap<Integer, Item> items = new HashMap<>();
     private int id = 0;

@@ -5,10 +5,14 @@ import javax.validation.Valid;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.validated.Create;
+import ru.practicum.shareit.validated.Update;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,28 +23,29 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public List<User> getListUsers() {
-        List<User> usersList = userService.getListUsers();
+    public List<UserDto> getListUsers() {
+        List<UserDto> usersList = userService.getListUsers();
         log.info("Get request /users, data transmitted: {}", usersList);
         return usersList;
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public User createUser(@Valid @RequestBody User user) {
+    public UserDto createUser(@Validated(Create.class) @RequestBody User user) {
         log.info("Post equest /users, data transmitted: {}", user);
         return userService.createUser(user);
     }
 
     @PatchMapping("/{id}")
-    public User updateUser(
+    public UserDto updateUser(
             @PathVariable Integer id,
-            @RequestBody UserDto user) throws Throwable {
+            @Validated(Update.class)  @RequestBody UserDto user) throws Throwable {
         log.info("Patch request /users, data transmitted: {}", user);
         return userService.updateUser(id, user);
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Integer id) throws Throwable {
+    public UserDto getUserById(@PathVariable Integer id) throws Throwable {
         log.info("Get request /users/{id}", id);
         return userService.getUserById(id);
     }

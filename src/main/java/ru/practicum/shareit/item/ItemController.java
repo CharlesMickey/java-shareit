@@ -6,14 +6,14 @@ import javax.validation.Valid;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDtoUpdate;
 import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.validated.Create;
+import ru.practicum.shareit.validated.Update;
 
-/**
- * TODO Sprint add-controllers.
- */
 
 @Slf4j
 @RestController
@@ -30,25 +30,25 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDto> getAllItemsByOwnerId(
-            @RequestHeader("X-Sharer-User-Id") int id) {
+    public List<ItemDto> getAllItemsByOwnerId(@RequestHeader("X-Sharer-User-Id") int id) {
         log.info("Get request /items, owner id: {}", id);
         return itemService.getAllItemsByOwnerId(id);
     }
 
+
     @GetMapping("/search")
-    public List<ItemDto> searchAllItemsByOwnerId(
-            @RequestParam(value = "text") String text) {
-        if (text.isEmpty()) return new ArrayList<>();
+    public List<ItemDto> searchAllItemsByOwnerId(@RequestParam(value = "text") String text) {
+        if (text.isBlank()) return new ArrayList<>();
 
         log.info("Get search items, request: {}", text);
         return itemService.searchItems(text);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public ItemDto createItem(
             @RequestHeader("X-Sharer-User-Id") int id,
-            @Valid @RequestBody ItemDto itemDto) {
+            @Validated(Create.class) @RequestBody ItemDto itemDto) {
         log.info("Post request /items, data transmitted: {}", itemDto);
         return itemService.createItem(id, itemDto);
     }
@@ -57,7 +57,7 @@ public class ItemController {
     public ItemDto updateItem(
             @PathVariable Integer idItem,
             @RequestHeader("X-Sharer-User-Id") int idOwner,
-            @Valid @RequestBody ItemDtoUpdate itemDto) {
+            @Validated(Update.class) @RequestBody ItemDto itemDto) {
         log.info("Patch request /items data transmitted: {}", itemDto);
         ItemDto itemDto1 = itemService.updateItem(idItem, idOwner, itemDto);
         log.info("Patch DATA: {}", itemDto1);

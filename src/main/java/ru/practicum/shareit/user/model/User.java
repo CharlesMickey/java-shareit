@@ -5,10 +5,9 @@ import javax.validation.constraints.NotBlank;
 
 import lombok.*;
 import org.springframework.validation.annotation.Validated;
+import ru.practicum.shareit.validated.Create;
+import ru.practicum.shareit.validated.Update;
 
-/**
- * TODO Sprint add-controllers.
- */
 
 @Data
 @Validated
@@ -18,10 +17,10 @@ public class User {
 
     private int id;
 
-    @NotBlank(message = "Имя обязательное поле")
+    @NotBlank(groups = {Create.class}, message = "Имя обязательное поле")
     private String name;
 
-    @NotBlank(message = "Email обязательное поле")
-    @Email(message = "Не верный формат email")
+    @NotBlank(groups = {Create.class}, message = "Email обязательное поле")
+    @Email(groups = {Create.class, Update.class}, message = "Не верный формат email")
     private String email;
 }

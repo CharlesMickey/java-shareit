@@ -1,19 +1,21 @@
 package ru.practicum.shareit.storage;
 
+import ru.practicum.shareit.item.model.Item;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-public interface ItemDaoStorage<T> {
+public interface ItemDaoStorage {
     int setId();
 
-    HashMap<Integer, T> getItems();
+    HashMap<Integer, Item> getItems();
 
-    List<T> getListItems();
+    List<Item> getListItems();
 
-    T createItem(T item);
+    Item createItem(Item item);
 
-    Optional<T> findItemById(Integer id);
+    Optional<Item> findItemById(Integer id);
 
-    T updateItem(T item);
+    Item updateItem(Item item);
 }
