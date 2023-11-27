@@ -8,15 +8,15 @@ import ru.practicum.shareit.item.dto.ItemDto;
 public interface ItemService {
 
 
-    public ItemDto getItemById(Integer id);
+    ItemDto getItemById(Integer id);
 
-    public List<ItemDto> getAllItemsByOwnerId(Integer id);
+    List<ItemDto> getAllItemsByOwnerId(Integer id);
 
-    public List<ItemDto> searchItems(String text);
+    List<ItemDto> searchItems(String text);
 
-    public ItemDto createItem(Integer id, ItemDto itemDto);
+    ItemDto createItem(Integer id, ItemDto itemDto);
 
-    public ItemDto updateItem(
+    ItemDto updateItem(
             Integer idItem,
             Integer idOwner,
             ItemDto itemDto

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserDaoStorage {
-        int setId();
+    int setId();
 
     HashMap<Integer, User> getItems();
 

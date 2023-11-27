@@ -22,19 +22,21 @@ public class ItemController {
 
     private final ItemService itemService;
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public ItemDto getItemById(@PathVariable Integer id) {
         log.info("Get request /items, item id: {}", id);
         return itemService.getItemById(id);
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<ItemDto> getAllItemsByOwnerId(@RequestHeader("X-Sharer-User-Id") int id) {
         log.info("Get request /items, owner id: {}", id);
         return itemService.getAllItemsByOwnerId(id);
     }
 
-
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/search")
     public List<ItemDto> searchAllItemsByOwnerId(@RequestParam(value = "text") String text) {
         if (text.isBlank()) return new ArrayList<>();
@@ -52,6 +54,7 @@ public class ItemController {
         return itemService.createItem(id, itemDto);
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{idItem}")
     public ItemDto updateItem(
             @PathVariable Integer idItem,

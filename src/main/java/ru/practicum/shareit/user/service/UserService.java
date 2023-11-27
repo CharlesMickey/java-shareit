@@ -8,14 +8,13 @@ import ru.practicum.shareit.user.model.User;
 
 public interface UserService {
 
+    List<UserDto> getListUsers();
 
-    public List<UserDto> getListUsers();
+    UserDto createUser(User user);
 
-    public UserDto createUser(User user);
+    UserDto updateUser(Integer id, UserDto user);
 
-    public UserDto updateUser(Integer id, UserDto user);
+    UserDto getUserById(Integer id);
 
-    public UserDto getUserById(Integer id);
-
-    public void deleteUser(Integer id);
+    void deleteUser(Integer id);
 }

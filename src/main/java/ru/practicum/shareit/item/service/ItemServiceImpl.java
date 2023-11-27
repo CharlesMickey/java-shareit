@@ -67,11 +67,7 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.toItemDto(item);
     }
 
-    public ItemDto updateItem(
-            Integer idItem,
-            Integer idOwner,
-            ItemDto itemDto
-    ) {
+    public ItemDto updateItem(Integer idItem, Integer idOwner, ItemDto itemDto) {
         userDao
                 .findItemById(idOwner)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));

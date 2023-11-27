@@ -21,6 +21,7 @@ public class UserController {
 
     private final UserService userService;
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<UserDto> getListUsers() {
         List<UserDto> usersList = userService.getListUsers();
@@ -31,10 +32,11 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public UserDto createUser(@Validated(Create.class) @RequestBody User user) {
-        log.info("Post equest /users, data transmitted: {}", user);
+        log.info("Post request /users, data transmitted: {}", user);
         return userService.createUser(user);
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{id}")
     public UserDto updateUser(
             @PathVariable Integer id,
@@ -43,12 +45,14 @@ public class UserController {
         return userService.updateUser(id, user);
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public UserDto getUserById(@PathVariable Integer id) throws Throwable {
         log.info("Get request /users/{id}", id);
         return userService.getUserById(id);
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Integer id) throws Throwable {
         log.info("Delete request /users/{id}", id);
