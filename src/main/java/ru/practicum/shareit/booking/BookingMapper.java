@@ -23,7 +23,7 @@ public class BookingMapper {
     }
 
     public BookingNextLastDto toBookingLastNextDto(Booking booking) {
-        if(booking == null || booking.getStatus() == BookingStatus.REJECTED) {
+        if (booking == null || booking.getStatus() == BookingStatus.REJECTED) {
             return null;
         }
 
@@ -34,7 +34,7 @@ public class BookingMapper {
                 booking.getItem().getId(),
                 booking.getItem(),
                 booking.getBooker(),
-               booking.getBooker().getId(),
+                booking.getBooker().getId(),
                 booking.getStatus()
         );
     }
