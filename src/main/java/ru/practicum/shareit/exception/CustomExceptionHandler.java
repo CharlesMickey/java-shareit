@@ -57,6 +57,7 @@ public class CustomExceptionHandler {
         body.put("message", e.getMessage());
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(UnsupportedStatusException.class)
     public ResponseEntity<Object> handleUnsupportedStatusException(final UnsupportedStatusException e) {
         log.info("UNSUPPORTED_STATUS: {}", e.getMessage());

@@ -30,7 +30,7 @@ public class Booking {
     private LocalDateTime start;
 
     @Future(message = "Нельзя бронировать задним числом")
-    @Column(name = "end_date" )
+    @Column(name = "end_date")
     private LocalDateTime end;
 
     @ManyToOne
@@ -43,5 +43,4 @@ public class Booking {
 
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
-
 }

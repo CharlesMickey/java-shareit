@@ -23,7 +23,9 @@ public class BookingMapper {
     }
 
     public BookingNextLastDto toBookingLastNextDto(Booking booking) {
-        if(booking == null || booking.getStatus() == BookingStatus.REJECTED) return  null;
+        if(booking == null || booking.getStatus() == BookingStatus.REJECTED) {
+            return null;
+        }
 
         return new BookingNextLastDto(
                 booking.getId(),
