@@ -1,56 +1,36 @@
 package ru.practicum.shareit.user.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exception.ConflictException;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.storage.UserDaoStorage;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserDaoStorage storageDao;
+    private final UserRepository repository;
 
     public List<UserDto> getListUsers() {
-        return storageDao.getListItems().stream().map(i -> UserMapper.toUserDto(i)).collect(Collectors.toList());
+        List<User> users = repository.findAll();
+
+        return UserMapper.toUserDto(users);
     }
 
     public UserDto createUser(User user) {
-        if (user.getName().isBlank()) {
-            user.setName(user.getEmail());
-        }
-        List<User> userList = storageDao.getListItems();
 
-        for (User existingUser : userList) {
-            if (existingUser.getEmail().equals(user.getEmail())) {
-                throw new ConflictException("Пользователь с таким email уже существует");
-            }
-        }
-
-        return UserMapper.toUserDto(storageDao.createItem(user));
+        return UserMapper.toUserDto(repository.save(user));
     }
 
-    public UserDto updateUser(Integer id, UserDto user) {
-        User oldUser = storageDao
-                .findItemById(id)
+    public UserDto updateUser(Long id, UserDto user) {
+        User oldUser = repository
+                .findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
-
-        List<User> userList = storageDao.getListItems();
-
-        for (User existingUser : userList) {
-            if (
-                    existingUser.getEmail().equals(user.getEmail()) &&
-                            existingUser.getId() != id) {
-                throw new ConflictException("Пользователь с таким email уже существует");
-            }
-        }
 
         User newUser = new User(
                 id,
@@ -63,22 +43,22 @@ public class UserServiceImpl implements UserService {
                         ? oldUser.getEmail()
                         : user.getEmail()
         );
-        return UserMapper.toUserDto(storageDao.updateItem(newUser));
+        return UserMapper.toUserDto(repository.save(newUser));
     }
 
-    public UserDto getUserById(Integer id) {
-        User user = storageDao
-                .findItemById(id)
+    public UserDto getUserById(Long id) {
+        User user = repository
+                .findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
         return UserMapper.toUserDto(user);
     }
 
-    public void deleteUser(Integer id) {
-        storageDao
-                .findItemById(id)
+    public void deleteUser(Long id) {
+        repository
+                .findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
-        storageDao.deleteItem(id);
+        repository.deleteById(id);
     }
 }

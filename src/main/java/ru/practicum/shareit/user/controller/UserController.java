@@ -39,22 +39,22 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{id}")
     public UserDto updateUser(
-            @PathVariable Integer id,
-            @Validated(Update.class)  @RequestBody UserDto user) throws Throwable {
+            @PathVariable Long id,
+            @Validated(Update.class) @RequestBody UserDto user) throws Throwable {
         log.info("Patch request /users, data transmitted: {}", user);
         return userService.updateUser(id, user);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    public UserDto getUserById(@PathVariable Integer id) throws Throwable {
+    public UserDto getUserById(@PathVariable Long id) throws Throwable {
         log.info("Get request /users/{id}", id);
         return userService.getUserById(id);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Integer id) throws Throwable {
+    public void deleteUser(@PathVariable Long id) throws Throwable {
         log.info("Delete request /users/{id}", id);
 
         userService.deleteUser(id);

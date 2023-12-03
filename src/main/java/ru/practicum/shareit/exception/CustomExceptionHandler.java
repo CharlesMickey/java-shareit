@@ -57,6 +57,15 @@ public class CustomExceptionHandler {
         body.put("message", e.getMessage());
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(UnsupportedStatusException.class)
+    public ResponseEntity<Object> handleUnsupportedStatusException(final UnsupportedStatusException e) {
+        log.info("UNSUPPORTED_STATUS: {}", e.getMessage());
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("error", "Unknown state: UNSUPPORTED_STATUS");
+        body.put("message", e.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)

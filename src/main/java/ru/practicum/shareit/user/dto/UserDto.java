@@ -16,7 +16,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class UserDto {
 
-    private int id;
+    private long id;
 
     @NotBlank(groups = {Create.class}, message = "Имя обязательное поле")
     private String name;

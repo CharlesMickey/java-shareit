@@ -1,4 +1,4 @@
-package ru.practicum.shareit.request.dto;
+package ru.practicum.shareit.request;
 
 import java.time.LocalDate;
 import lombok.Builder;
