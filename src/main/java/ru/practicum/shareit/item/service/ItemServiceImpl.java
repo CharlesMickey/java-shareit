@@ -44,8 +44,8 @@ public class ItemServiceImpl implements ItemService {
         BookingNextLastDto nextBooking = BookingMapper.toBookingLastNextDto(getNextBooking(bookings));
         Long itemOwnerId = item.getOwner().getId();
 
-        return ItemMapper.toItemWithBookingDto(item, userId == itemOwnerId
-                ? lastBooking : null, userId == itemOwnerId ? nextBooking : null, commentDtos);
+        return ItemMapper.toItemWithBookingDto(item, userId.equals(itemOwnerId)
+                ? lastBooking : null, userId.equals(itemOwnerId) ? nextBooking : null, commentDtos);
 
     }
 
