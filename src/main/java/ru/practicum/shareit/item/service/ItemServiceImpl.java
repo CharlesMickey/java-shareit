@@ -7,6 +7,7 @@ import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.booking.BookingNextLastDto;
@@ -26,6 +27,7 @@ import ru.practicum.shareit.user.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
@@ -38,10 +40,9 @@ public class ItemServiceImpl implements ItemService {
                 .findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Вещь не найдена"));
 
-        List<Booking> bookings = bookingRepository.findBookingByItemId(item.getId());
         List<CommentDto> commentDtos = CommentMapper.toCommentDto(commentRepository.findAllCommentByItemId(itemId));
-        BookingNextLastDto lastBooking = BookingMapper.toBookingLastNextDto(getLatestBooking(bookings));
-        BookingNextLastDto nextBooking = BookingMapper.toBookingLastNextDto(getNextBooking(bookings));
+        BookingNextLastDto lastBooking = BookingMapper.toBookingLastNextDto(getLatestBooking(item.getId()));
+        BookingNextLastDto nextBooking = BookingMapper.toBookingLastNextDto(getNextBooking(item.getId()));
         Long itemOwnerId = item.getOwner().getId();
 
         return ItemMapper.toItemWithBookingDto(item, userId.equals(itemOwnerId)
@@ -58,12 +59,10 @@ public class ItemServiceImpl implements ItemService {
         List<ItemWithBookingsDateDto> result = new ArrayList<>();
 
         for (Item item : items) {
-            List<Booking> bookings = bookingRepository.findBookingByItemId(item.getId());
-            BookingNextLastDto lastBooking = BookingMapper.toBookingLastNextDto(getLatestBooking(bookings));
-            BookingNextLastDto nextBooking = BookingMapper.toBookingLastNextDto(getNextBooking(bookings));
+            BookingNextLastDto lastBooking = BookingMapper.toBookingLastNextDto(getLatestBooking(item.getId()));
+            BookingNextLastDto nextBooking = BookingMapper.toBookingLastNextDto(getNextBooking(item.getId()));
             List<CommentDto> commentDtos = CommentMapper.toCommentDto(commentRepository
                     .findAllCommentByItemId(item.getId()));
-
 
             ItemWithBookingsDateDto itemWithBookingsDateDto = ItemMapper.toItemWithBookingDto(item,
                     lastBooking, nextBooking, commentDtos);
@@ -73,21 +72,16 @@ public class ItemServiceImpl implements ItemService {
         return result;
     }
 
-    private Booking getLatestBooking(List<Booking> bookings) {
-
-        return bookings.stream()
-                .filter(booking -> booking.getStart().isBefore(LocalDateTime.now()))
-                .max(Comparator.comparing(Booking::getStart))
+    private Booking getLatestBooking(Long itemId) {
+        return bookingRepository.findTopByItemIdAndStartBeforeOrderByStartDesc(itemId, LocalDateTime.now())
                 .orElse(null);
     }
 
-    private Booking getNextBooking(List<Booking> bookings) {
-
-        return bookings.stream()
-                .filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
-                .min(Comparator.comparing(Booking::getStart))
+    private Booking getNextBooking(Long itemId) {
+        return bookingRepository.findTopByItemIdAndStartAfterOrderByStartAsc(itemId, LocalDateTime.now())
                 .orElse(null);
     }
+
 
     public List<ItemDto> searchItems(String text) {
         return ItemMapper.toItemDto(itemRepository.search(text));
@@ -133,7 +127,7 @@ public class ItemServiceImpl implements ItemService {
         );
 
 
-        return ItemMapper.toItemDto(itemRepository.save(item));
+        return ItemMapper.toItemDto(item);
     }
 
     public CommentDto createComment(Long userId, Long idItem, CommentDto commentDto) {

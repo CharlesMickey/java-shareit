@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.constants.HttpConstants;
 import ru.practicum.shareit.validated.Create;
 
 import java.util.List;
@@ -20,8 +21,8 @@ public class BookingController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
-    BookingDto createBooking(@RequestHeader("X-Sharer-User-Id") Long bookerId,
-                             @Validated(Create.class) @RequestBody BookingDto bookingDto) {
+    public BookingDto createBooking(@RequestHeader(HttpConstants.X_SHARER_USER_ID) Long bookerId,
+                                    @Validated(Create.class) @RequestBody BookingDto bookingDto) {
         log.info("Post request /users, data transmitted: {}", bookingDto);
 
         return bookingService.createBooking(bookerId, bookingDto);
@@ -29,34 +30,35 @@ public class BookingController {
     }
 
     @PatchMapping("/{bookingId}")
-    BookingDto approvingBooking(@RequestHeader("X-Sharer-User-Id") Long ownerId,
-                                @PathVariable Long bookingId,
-                                @RequestParam(value = "approved") Boolean approved) {
+    public BookingDto approvingBooking(@RequestHeader(HttpConstants.X_SHARER_USER_ID) Long ownerId,
+                                       @PathVariable Long bookingId,
+                                       @RequestParam(value = "approved") Boolean approved) {
         log.info("Patch request /booking approved, data transmitted: {}", approved);
 
         return bookingService.approvingBooking(bookingId, ownerId, approved);
     }
 
     @GetMapping("/{bookingId}")
-    BookingDto getBookingById(@RequestHeader("X-Sharer-User-Id") Long userId,
-                              @PathVariable Long bookingId) {
+    public BookingDto getBookingById(@RequestHeader(HttpConstants.X_SHARER_USER_ID) Long userId,
+                                     @PathVariable Long bookingId) {
         log.info("Get request /booking, userId: {},  and bookingId: {} ", userId, bookingId);
 
         return bookingService.getBookingById(bookingId, userId);
     }
 
     @GetMapping()
-    List<BookingDto> findUserBookingsWithState(@RequestHeader("X-Sharer-User-id") Long userId,
-                                               @RequestParam(value = "state", required = false, defaultValue = "ALL")
-                                               String status) {
+    public List<BookingDto> findUserBookingsWithState(
+            @RequestHeader(HttpConstants.X_SHARER_USER_ID) Long userId,
+            @RequestParam(value = "state", required = false, defaultValue = "ALL")
+            String status) {
         log.info("Get with params state, userId: {}, status: {}", userId, status);
         return bookingService.findUserBookingsWithState(userId, status);
     }
 
     @GetMapping("/owner")
-    List<BookingDto> findOwnerBookingsWithState(@RequestHeader("X-Sharer-User-id") Long ownerId,
-                                                @RequestParam(value = "state", required = false, defaultValue = "ALL")
-                                                String status) {
+    public List<BookingDto> findOwnerBookingsWithState(@RequestHeader(HttpConstants.X_SHARER_USER_ID) Long ownerId,
+                                                       @RequestParam(value = "state", defaultValue = "ALL")
+                                                       String status) {
         log.info("Get with params state, userId: {}, status: {}", ownerId, status);
         return bookingService.findOwnerBookingsWithState(ownerId, status);
     }

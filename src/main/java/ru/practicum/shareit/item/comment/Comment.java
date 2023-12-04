@@ -6,14 +6,15 @@ import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.validated.Create;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comments", schema = "public")
 @Data
-@Validated
 @NoArgsConstructor
 @AllArgsConstructor
 public class Comment {
@@ -21,6 +22,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(groups = Create.class, message = "Комментарий не может быть пустым")
     @Column
     private String text;
 

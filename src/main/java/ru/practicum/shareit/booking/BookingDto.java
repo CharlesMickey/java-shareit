@@ -15,7 +15,6 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.validated.Create;
 
 @Data
-@Validated
 @Builder
 public class BookingDto {
 
@@ -26,7 +25,7 @@ public class BookingDto {
     private LocalDateTime start;
 
     @NotNull(groups = {Create.class}, message = "End не может быть пустым")
-    @FutureOrPresent(groups = {Create.class}, message = "Нельзя бронировать задним числом")
+    @FutureOrPresent(groups = {Create.class}, message = "End – время в будущем")
     private LocalDateTime end;
 
 

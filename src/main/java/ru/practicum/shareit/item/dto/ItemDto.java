@@ -10,7 +10,6 @@ import ru.practicum.shareit.validated.Create;
 
 
 @Data
-@Validated
 @Builder
 public class ItemDto {
 

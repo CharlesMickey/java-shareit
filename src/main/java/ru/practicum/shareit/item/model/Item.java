@@ -12,7 +12,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "items", schema = "public")
 @Data
-@Validated
 @NoArgsConstructor
 @AllArgsConstructor
 public class Item {

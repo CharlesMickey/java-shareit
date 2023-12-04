@@ -12,7 +12,6 @@ import ru.practicum.shareit.validated.Update;
 @Entity
 @Table(name = "users", schema = "public")
 @Data
-@Validated
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {

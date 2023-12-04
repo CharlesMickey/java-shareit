@@ -26,7 +26,6 @@ public class BookingNextLastDto {
     @FutureOrPresent(groups = {Create.class}, message = "Нельзя бронировать задним числом")
     private LocalDateTime end;
 
-
     @NotNull(groups = {Create.class}, message = "ItemId не может быть пустым")
     private Long itemId;
 
@@ -35,7 +34,6 @@ public class BookingNextLastDto {
     private User booker;
 
     private Long bookerId;
-
 
     private BookingStatus status;
 }

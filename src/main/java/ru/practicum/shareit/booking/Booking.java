@@ -16,7 +16,6 @@ import ru.practicum.shareit.user.model.User;
 @Entity
 @Table(name = "bookings", schema = "public")
 @Data
-@Validated
 @NoArgsConstructor
 @AllArgsConstructor
 public class Booking {
