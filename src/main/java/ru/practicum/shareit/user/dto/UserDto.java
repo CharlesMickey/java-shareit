@@ -3,7 +3,6 @@ package ru.practicum.shareit.user.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.validated.Create;
 import ru.practicum.shareit.validated.Update;
 

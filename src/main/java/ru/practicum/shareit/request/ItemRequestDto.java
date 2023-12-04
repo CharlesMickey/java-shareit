@@ -3,7 +3,6 @@ package ru.practicum.shareit.request;
 import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.user.model.User;
 
 /**
@@ -11,7 +10,6 @@ import ru.practicum.shareit.user.model.User;
  */
 
 @Data
-@Validated
 @Builder
 public class ItemRequestDto {
 

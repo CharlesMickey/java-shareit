@@ -3,7 +3,6 @@ package ru.practicum.shareit.request;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
@@ -11,7 +10,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "requests", schema = "public")
 @Data
-@Validated
 @NoArgsConstructor
 @AllArgsConstructor
 

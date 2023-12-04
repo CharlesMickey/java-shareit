@@ -5,7 +5,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 import lombok.*;
-import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.validated.Create;
 import ru.practicum.shareit.validated.Update;
 
