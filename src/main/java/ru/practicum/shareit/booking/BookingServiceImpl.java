@@ -16,12 +16,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
 
+    @Transactional
     public BookingDto createBooking(Long bookerId, BookingDto bookingDto) {
         User booker = userRepository.findById(bookerId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
@@ -37,6 +37,7 @@ public class BookingServiceImpl implements BookingService {
                 .save(BookingMapper.toBooking(bookingDto, item, booker, BookingStatus.WAITING)));
     }
 
+    @Transactional
     public BookingDto approvingBooking(Long bookingId, Long ownerId, Boolean approved) {
 
         Booking booking = bookingRepository.findBookingByBookingIdAndOwnerId(bookingId, ownerId)
@@ -48,7 +49,7 @@ public class BookingServiceImpl implements BookingService {
         }
 
         booking.setStatus(approved == true ? BookingStatus.APPROVED : BookingStatus.REJECTED);
-        return BookingMapper.toBookingDto(bookingRepository.save(booking));
+        return BookingMapper.toBookingDto(booking);
     }
 
     public BookingDto getBookingById(Long bookingId, Long userId) {

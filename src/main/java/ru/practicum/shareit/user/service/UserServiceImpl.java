@@ -13,7 +13,6 @@ import ru.practicum.shareit.user.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
@@ -24,11 +23,13 @@ public class UserServiceImpl implements UserService {
         return UserMapper.toUserDto(users);
     }
 
+    @Transactional
     public UserDto createUser(User user) {
 
         return UserMapper.toUserDto(repository.save(user));
     }
 
+    @Transactional
     public UserDto updateUser(Long id, UserDto user) {
         User oldUser = repository
                 .findById(id)
