@@ -12,9 +12,9 @@ public interface UserService {
 
     UserDto createUser(User user);
 
-    UserDto updateUser(Integer id, UserDto user);
+    UserDto updateUser(Long id, UserDto user);
 
-    UserDto getUserById(Integer id);
+    UserDto getUserById(Long id);
 
-    void deleteUser(Integer id);
+    void deleteUser(Long id);
 }
