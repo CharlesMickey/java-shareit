@@ -1,63 +1,33 @@
 package ru.practicum.shareit.booking;
 
-import lombok.experimental.UtilityClass;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.status.BookingStatus;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@UtilityClass
-public class BookingMapper {
-    public BookingDto toBookingDto(Booking booking) {
-        return new BookingDto(
-                booking.getId(),
-                booking.getStart(),
-                booking.getEnd(),
-                booking.getItem().getId(),
-                booking.getItem(),
-                booking.getBooker(),
-                booking.getStatus()
-        );
-    }
+@Mapper(componentModel = "spring")
+public interface BookingMapper {
 
-    public BookingNextLastDto toBookingLastNextDto(Booking booking) {
-        if (booking == null || booking.getStatus() == BookingStatus.REJECTED) {
-            return null;
-        }
-
-        return new BookingNextLastDto(
-                booking.getId(),
-                booking.getStart(),
-                booking.getEnd(),
-                booking.getItem().getId(),
-                booking.getItem(),
-                booking.getBooker(),
-                booking.getBooker().getId(),
-                booking.getStatus()
-        );
-    }
+    BookingMapper INSTANCE = Mappers.getMapper(BookingMapper.class);
 
 
-    public List<BookingDto> toBookingDto(List<Booking> listBookings) {
-        List<BookingDto> listDto = new ArrayList<>();
+    BookingDto toBookingDto(Booking booking);
 
-        for (Booking booking : listBookings) {
-            listDto.add(toBookingDto(booking));
-        }
+    @Mapping(source = "booking.item.id", target = "itemId")
+    @Mapping(source = "booking.booker.id", target = "bookerId")
+    BookingNextLastDto toBookingLastNextDto(Booking booking);
 
-        return listDto;
-    }
+    List<BookingDto> toBookingDto(List<Booking> listBookings);
 
-    public Booking toBooking(BookingDto bookingDto, Item item, User booker, BookingStatus status) {
-        return new Booking(
-                bookingDto.getId(),
-                bookingDto.getStart(),
-                bookingDto.getEnd(),
-                item,
-                booker,
-                status
-        );
-    }
+    @Mapping(source = "bookingDto.id", target = "id")
+    @Mapping(source = "item", target = "item")
+    @Mapping(source = "booker", target = "booker")
+    @Mapping(source = "status", target = "status")
+    Booking toBooking(BookingDto bookingDto, Item item, User booker, BookingStatus status);
+
+
 }

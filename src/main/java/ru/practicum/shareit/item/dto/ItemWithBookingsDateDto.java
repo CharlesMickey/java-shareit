@@ -7,6 +7,7 @@ import ru.practicum.shareit.booking.BookingNextLastDto;
 import ru.practicum.shareit.item.comment.CommentDto;
 import ru.practicum.shareit.validated.Create;
 
+import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 @Builder
 public class ItemWithBookingsDateDto {
 
+    @Id
     private Long id;
 
     @NotBlank(groups = {Create.class}, message = "Name не может быть пустым")

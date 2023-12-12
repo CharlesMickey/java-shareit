@@ -20,6 +20,7 @@ public class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
+    private final BookingMapper bookingMapper;
 
     @Transactional
     public BookingDto createBooking(Long bookerId, BookingDto bookingDto) {
@@ -33,8 +34,8 @@ public class BookingServiceImpl implements BookingService {
             throw new BadRequestException("Вещь недоступна");
         }
 
-        return BookingMapper.toBookingDto(bookingRepository
-                .save(BookingMapper.toBooking(bookingDto, item, booker, BookingStatus.WAITING)));
+        return bookingMapper.toBookingDto(bookingRepository
+                .save(bookingMapper.toBooking(bookingDto, item, booker, BookingStatus.WAITING)));
     }
 
     @Transactional
@@ -49,7 +50,7 @@ public class BookingServiceImpl implements BookingService {
         }
 
         booking.setStatus(approved == true ? BookingStatus.APPROVED : BookingStatus.REJECTED);
-        return BookingMapper.toBookingDto(booking);
+        return bookingMapper.toBookingDto(booking);
     }
 
     public BookingDto getBookingById(Long bookingId, Long userId) {
@@ -59,7 +60,7 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = bookingRepository.findBookingByBookingIdAndOwnerIdOrOwnerItemId(bookingId, userId)
                 .orElseThrow(() -> new NotFoundException("Ничего не найдено"));
 
-        return BookingMapper.toBookingDto(booking);
+        return bookingMapper.toBookingDto(booking);
     }
 
 
@@ -67,7 +68,7 @@ public class BookingServiceImpl implements BookingService {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
-        return BookingMapper.toBookingDto(bookingRepository
+        return bookingMapper.toBookingDto(bookingRepository
                 .findUserBookingsWithState(userId, mapToStateString(status)));
     }
 
@@ -75,7 +76,7 @@ public class BookingServiceImpl implements BookingService {
         userRepository.findById(ownerId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
-        return BookingMapper.toBookingDto(bookingRepository
+        return bookingMapper.toBookingDto(bookingRepository
                 .findOwnerBookingsWithState(ownerId, mapToStateString(status)));
     }
 

@@ -1,58 +1,33 @@
 package ru.practicum.shareit.item.dto;
 
-import lombok.experimental.UtilityClass;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 import ru.practicum.shareit.booking.BookingNextLastDto;
 import ru.practicum.shareit.item.comment.CommentDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@UtilityClass
-public class ItemMapper {
+@Mapper(componentModel = "spring")
+public interface ItemMapper {
 
-    public ItemDto toItemDto(Item item) {
-        return new ItemDto(
-                item.getId(),
-                item.getName(),
-                item.getDescription(),
-                item.getAvailable()
-        );
-    }
+    ItemMapper INSTANCE = Mappers.getMapper(ItemMapper.class);
 
-    public ItemWithBookingsDateDto toItemWithBookingDto(Item item,
-                                                        BookingNextLastDto lastBooking,
-                                                        BookingNextLastDto nextBooking, List<CommentDto> comments) {
-        return new ItemWithBookingsDateDto(
-                item.getId(),
-                item.getName(),
-                item.getDescription(),
-                item.getAvailable(),
-                lastBooking,
-                nextBooking,
-                comments
-        );
-    }
+    @Mapping(source = "item.request.id", target = "requestId")
+    ItemDto toItemDto(Item item);
 
-    public List<ItemDto> toItemDto(List<Item> listItems) {
-        List<ItemDto> listItemsDto = new ArrayList<>();
+    @Mapping(source = "item.id", target = "id")
+    ItemWithBookingsDateDto toItemWithBookingDto(Item item,
+                                                 BookingNextLastDto lastBooking,
+                                                 BookingNextLastDto nextBooking, List<CommentDto> comments);
 
-        for (Item item : listItems) {
-            listItemsDto.add(toItemDto(item));
-        }
+    List<ItemDto> toItemDto(List<Item> listItems);
 
-        return listItemsDto;
-    }
+    @Mapping( target = "id", ignore = true)
+    @Mapping(source = "itemDto.name", target = "name")
+    Item toItem(User owner, ItemDto itemDto);
 
-    public Item toItem(User owner, ItemDto itemDto) {
-        return new Item(
-                itemDto.getId(),
-                itemDto.getName(),
-                itemDto.getDescription(),
-                itemDto.getAvailable() == true ? true : false,
-                owner,
-                null
-        );
-    }
+
 }
