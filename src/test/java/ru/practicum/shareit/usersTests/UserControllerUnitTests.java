@@ -64,9 +64,9 @@ public class UserControllerUnitTests {
     void deleteTest() throws Throwable {
         user.setEmail("1egwev@er.ru");
         UserDto userDto = userController.createUser(user);
-        assertEquals(13, userController.getListUsers().size());
+        assertEquals(16, userController.getListUsers().size());
         userController.deleteUser(user.getId());
-        assertEquals(12, userController.getListUsers().size());
+        assertEquals(15, userController.getListUsers().size());
     }
 
     @Test

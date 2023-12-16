@@ -145,6 +145,7 @@ public class ItemControllerUnitTests {
 
     @Test
     void createWithWrongItemRequest() {
+        userM.setEmail("2414124@wer.ru");
         itemDto.setRequestId(70L);
         UserDto user = userController.createUser(userM);
         assertThrows(NotFoundException.class, () -> itemController.createItem(11333L, itemDto));

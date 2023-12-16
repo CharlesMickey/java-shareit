@@ -6,6 +6,7 @@ import javax.validation.constraints.Future;
 import javax.validation.constraints.FutureOrPresent;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.model.Item;
@@ -15,6 +16,7 @@ import ru.practicum.shareit.user.model.User;
 @Entity
 @Table(name = "bookings", schema = "public")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Booking {
