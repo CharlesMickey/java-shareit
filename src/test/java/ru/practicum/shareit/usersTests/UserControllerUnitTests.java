@@ -66,7 +66,7 @@ public class UserControllerUnitTests {
         UserDto userDto = userController.createUser(user);
         assertEquals(13, userController.getListUsers().size());
         userController.deleteUser(user.getId());
-        assertEquals(15, userController.getListUsers().size());
+        assertEquals(12, userController.getListUsers().size());
     }
 
     @Test

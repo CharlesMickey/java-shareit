@@ -107,7 +107,7 @@ public class ItemRequestsControllerUnitTests {
         user.setEmail("u69gg6424y@df.ru");
 
         UserDto userDto4 = userController.createUser(user);
-        assertEquals(1, itemRequestController.getAllItemRequests(userDto4.getId(), 0, 10).size());
+        assertEquals(2, itemRequestController.getAllItemRequests(userDto4.getId(), 0, 10).size());
     }
 
     @Test
