@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserMapper;
+import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -16,17 +16,18 @@ import ru.practicum.shareit.user.repository.UserRepository;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
+    private final UserMapper userMapper;
 
     public List<UserDto> getListUsers() {
         List<User> users = repository.findAll();
 
-        return UserMapper.toUserDto(users);
+        return userMapper.toUserDto(users);
     }
 
     @Transactional
     public UserDto createUser(User user) {
 
-        return UserMapper.toUserDto(repository.save(user));
+        return userMapper.toUserDto(repository.save(user));
     }
 
     @Transactional
@@ -44,7 +45,7 @@ public class UserServiceImpl implements UserService {
                 ? oldUser.getEmail()
                 : user.getEmail());
 
-        return UserMapper.toUserDto(oldUser);
+        return userMapper.toUserDto(oldUser);
     }
 
     public UserDto getUserById(Long id) {
@@ -52,7 +53,7 @@ public class UserServiceImpl implements UserService {
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
-        return UserMapper.toUserDto(user);
+        return userMapper.toUserDto(user);
     }
 
     public void deleteUser(Long id) {

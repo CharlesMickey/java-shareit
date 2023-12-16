@@ -49,17 +49,20 @@ public class BookingController {
     @GetMapping()
     public List<BookingDto> findUserBookingsWithState(
             @RequestHeader(HttpConstants.X_SHARER_USER_ID) Long userId,
-            @RequestParam(value = "state", required = false, defaultValue = "ALL")
-            String status) {
-        log.info("Get with params state, userId: {}, status: {}", userId, status);
-        return bookingService.findUserBookingsWithState(userId, status);
+            @RequestParam(value = "state", defaultValue = "ALL") String status,
+            @RequestParam(value = "from", defaultValue = "0") Integer from,
+            @RequestParam(value = "size", defaultValue = "10") Integer size) {
+        log.info("Get with params state, userId: {}, status: {},  from: {}, size: {}", userId, status, from, size);
+        return bookingService.findUserBookingsWithState(userId, status, from, size);
     }
 
     @GetMapping("/owner")
-    public List<BookingDto> findOwnerBookingsWithState(@RequestHeader(HttpConstants.X_SHARER_USER_ID) Long ownerId,
-                                                       @RequestParam(value = "state", defaultValue = "ALL")
-                                                       String status) {
-        log.info("Get with params state, userId: {}, status: {}", ownerId, status);
-        return bookingService.findOwnerBookingsWithState(ownerId, status);
+    public List<BookingDto> findOwnerBookingsWithState(
+            @RequestHeader(HttpConstants.X_SHARER_USER_ID) Long ownerId,
+            @RequestParam(value = "state", defaultValue = "ALL") String status,
+            @RequestParam(value = "from", defaultValue = "0") Integer from,
+            @RequestParam(value = "size", defaultValue = "10") Integer size) {
+        log.info("Get with params state, userId: {}, status: {},  from: {}, size: {}", ownerId, status, from, size);
+        return bookingService.findOwnerBookingsWithState(ownerId, status, from, size);
     }
 }

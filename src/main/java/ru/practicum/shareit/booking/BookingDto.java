@@ -1,6 +1,7 @@
 package ru.practicum.shareit.booking;
 
 import java.time.LocalDateTime;
+import javax.persistence.Id;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
@@ -17,6 +18,7 @@ import ru.practicum.shareit.validated.Create;
 @Builder
 public class BookingDto {
 
+    @Id
     private Long id;
 
     @NotNull(groups = {Create.class}, message = "Start не может быть пустым")

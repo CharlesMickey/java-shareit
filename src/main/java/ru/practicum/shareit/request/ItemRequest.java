@@ -6,18 +6,18 @@ import lombok.NoArgsConstructor;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "requests", schema = "public")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class ItemRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column
     private String description;
@@ -25,4 +25,15 @@ public class ItemRequest {
     @ManyToOne
     @JoinColumn(name = "requestor_id")
     private User requestor;
+
+    @Column
+    private LocalDateTime created;
+
+    @PrePersist
+    public void prePersist() {
+        if (created == null) {
+            created = LocalDateTime.now();
+        }
+    }
+
 }

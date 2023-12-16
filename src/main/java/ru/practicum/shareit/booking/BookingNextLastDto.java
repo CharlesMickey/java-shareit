@@ -8,6 +8,7 @@ import ru.practicum.shareit.status.BookingStatus;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.validated.Create;
 
+import javax.persistence.Id;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -16,6 +17,8 @@ import java.time.LocalDateTime;
 @Validated
 @Builder
 public class BookingNextLastDto {
+
+    @Id
     private Long id;
 
     @NotNull(groups = {Create.class}, message = "Start не может быть пустым")

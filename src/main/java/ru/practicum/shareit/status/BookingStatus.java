@@ -4,8 +4,11 @@ public enum BookingStatus {
     WAITING,
     APPROVED,
     REJECTED,
-    CANCELED, CURRENT, ALL, PAST, FUTURE;
-
+    CANCELED,
+    CURRENT,
+    ALL,
+    PAST,
+    FUTURE;
 
     public static BookingStatus fromString(String value) {
         for (BookingStatus status : values()) {

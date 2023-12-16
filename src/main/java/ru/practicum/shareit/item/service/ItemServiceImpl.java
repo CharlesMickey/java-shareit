@@ -5,22 +5,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.Booking;
-import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.booking.BookingNextLastDto;
 import ru.practicum.shareit.booking.BookingRepository;
+import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.exception.BadRequestException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.comment.CommentDto;
 import ru.practicum.shareit.item.comment.CommentMapper;
 import ru.practicum.shareit.item.comment.CommentRepository;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.dto.ItemWithBookingsDateDto;
+import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.request.ItemRequest;
+import ru.practicum.shareit.request.RequestRepository;
+import ru.practicum.shareit.status.BookingStatus;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -33,6 +39,9 @@ public class ItemServiceImpl implements ItemService {
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+    private final ItemMapper itemMapper;
+    private final BookingMapper bookingMapper;
+    private final RequestRepository requestRepository;
 
     public ItemWithBookingsDateDto getItemById(Long itemId, Long userId) {
         Item item = itemRepository
@@ -40,30 +49,36 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new NotFoundException("Вещь не найдена"));
 
         List<CommentDto> commentDtos = CommentMapper.toCommentDto(commentRepository.findAllCommentByItemId(itemId));
-        BookingNextLastDto lastBooking = BookingMapper.toBookingLastNextDto(getLatestBooking(item.getId()));
-        BookingNextLastDto nextBooking = BookingMapper.toBookingLastNextDto(getNextBooking(item.getId()));
+        BookingNextLastDto lastBooking = bookingMapper.toBookingLastNextDto(getLatestBooking(item.getId()));
+        BookingNextLastDto nextBooking = bookingMapper.toBookingLastNextDto(getNextBooking(item.getId()));
         Long itemOwnerId = item.getOwner().getId();
 
-        return ItemMapper.toItemWithBookingDto(item, userId.equals(itemOwnerId)
+        return itemMapper.toItemWithBookingDto(item, userId.equals(itemOwnerId)
                 ? lastBooking : null, userId.equals(itemOwnerId) ? nextBooking : null, commentDtos);
 
     }
 
-    public List<ItemWithBookingsDateDto> getAllItemsByOwnerId(Long id) {
-        User owner = userRepository
+    public List<ItemWithBookingsDateDto> getAllItemsByOwnerId(Long id, Integer from, Integer size) {
+        if (size <= 0 || from < 0) {
+            throw new BadRequestException("Неверные параметры пагинации");
+        }
+
+        userRepository
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
-        List<Item> items = itemRepository.findAllItemsByOwnerId(id);
+        Pageable pageable = PageRequest.of(((int) Math.floor((double) from / size)), size);
+
+        List<Item> items = itemRepository.findAllItemsByOwnerId(id, pageable).getContent();
         List<ItemWithBookingsDateDto> result = new ArrayList<>();
 
         for (Item item : items) {
-            BookingNextLastDto lastBooking = BookingMapper.toBookingLastNextDto(getLatestBooking(item.getId()));
-            BookingNextLastDto nextBooking = BookingMapper.toBookingLastNextDto(getNextBooking(item.getId()));
+            BookingNextLastDto lastBooking = bookingMapper.toBookingLastNextDto(getLatestBooking(item.getId()));
+            BookingNextLastDto nextBooking = bookingMapper.toBookingLastNextDto(getNextBooking(item.getId()));
             List<CommentDto> commentDtos = CommentMapper.toCommentDto(commentRepository
                     .findAllCommentByItemId(item.getId()));
 
-            ItemWithBookingsDateDto itemWithBookingsDateDto = ItemMapper.toItemWithBookingDto(item,
+            ItemWithBookingsDateDto itemWithBookingsDateDto = itemMapper.toItemWithBookingDto(item,
                     lastBooking, nextBooking, commentDtos);
             result.add(itemWithBookingsDateDto);
         }
@@ -77,13 +92,21 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private Booking getNextBooking(Long itemId) {
-        return bookingRepository.findTopByItemIdAndStartAfterOrderByStartAsc(itemId, LocalDateTime.now())
+        return bookingRepository.findTopByItemIdAndStatusNotAndStartAfterOrderByStartAsc(
+                        itemId,
+                        BookingStatus.REJECTED,
+                        LocalDateTime.now())
                 .orElse(null);
     }
 
 
-    public List<ItemDto> searchItems(String text) {
-        return ItemMapper.toItemDto(itemRepository.search(text));
+    public List<ItemDto> searchItems(String text, Integer from, Integer size) {
+        if (size <= 0 || from < 0) {
+            throw new BadRequestException("Неверные параметры пагинации");
+        }
+
+        Pageable pageable = PageRequest.of(((int) Math.floor((double) from / size)), size);
+        return itemMapper.toItemDto(itemRepository.search(text, pageable).getContent());
 
     }
 
@@ -92,11 +115,19 @@ public class ItemServiceImpl implements ItemService {
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
-        Item item = ItemMapper.toItem(owner, itemDto);
+        if (itemDto.getRequestId() != null) {
+            ItemRequest itemRequest = requestRepository.findById(itemDto.getRequestId())
+                    .orElseThrow(() -> new NotFoundException("Запрос не найден"));
+
+            itemDto.setRequest(itemRequest);
+
+        }
+
+        Item item = itemMapper.toItem(owner, itemDto);
 
         itemRepository.save(item);
 
-        return ItemMapper.toItemDto(item);
+        return itemMapper.toItemDto(item);
     }
 
     public ItemDto updateItem(Long idItem, Long idOwner, ItemDto itemDto) {
@@ -126,7 +157,7 @@ public class ItemServiceImpl implements ItemService {
         );
 
 
-        return ItemMapper.toItemDto(item);
+        return itemMapper.toItemDto(item);
     }
 
     public CommentDto createComment(Long userId, Long idItem, CommentDto commentDto) {
