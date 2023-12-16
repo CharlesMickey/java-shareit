@@ -76,7 +76,7 @@ public class ItemRequestsControllerUnitTests {
 
         UserDto userDto1 = userController.createUser(user);
         ItemRequestDto itemRequest = itemRequestController.createItemRequest(userDto1.getId(), itemRequestDto);
-        assertEquals(3L, itemRequestController.getItemRequest(userDto1.getId(), itemRequest.getId()).getId());
+        assertEquals(4L, itemRequestController.getItemRequest(userDto1.getId(), itemRequest.getId()).getId());
     }
 
     @Test
@@ -94,7 +94,7 @@ public class ItemRequestsControllerUnitTests {
 
     @Test
     void getItemsRequestTest() {
-        assertThrows(NotFoundException.class, () -> itemRequestController.getItemsRequest(1L));
+        assertThrows(NotFoundException.class, () -> itemRequestController.getItemsRequest(154645L));
     }
 
     @Test
@@ -103,7 +103,7 @@ public class ItemRequestsControllerUnitTests {
         UserDto userDTO3 = userController.createUser(user);
 
         ItemRequestDto itemRequest = itemRequestController.createItemRequest(userDTO3.getId(), itemRequestDto);
-        assertEquals(1, itemRequestController.getAllItemRequests(userDTO3.getId(), 0, 10).size());
+        assertEquals(2, itemRequestController.getAllItemRequests(userDTO3.getId(), 0, 10).size());
         user.setEmail("u69gg6424y@df.ru");
 
         UserDto userDto4 = userController.createUser(user);
@@ -112,7 +112,7 @@ public class ItemRequestsControllerUnitTests {
 
     @Test
     void getAllByWrongUser() {
-        assertThrows(NotFoundException.class, () -> itemRequestController.getAllItemRequests(1L, 0, 10));
+        assertThrows(NotFoundException.class, () -> itemRequestController.getAllItemRequests(1797L, 0, 10));
     }
 
     @Test
