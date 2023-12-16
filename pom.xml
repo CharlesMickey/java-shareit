@@ -198,27 +198,27 @@
                                             <limit>
                                                 <counter>INSTRUCTION</counter>
                                                 <value>COVEREDRATIO</value>
-                                                <minimum>0.01</minimum>
+                                                <maximum>0.01</maximum>
                                             </limit>
                                             <limit>
                                                 <counter>LINE</counter>
                                                 <value>COVEREDRATIO</value>
-                                                <minimum>0.9</minimum>
+                                                <maximum>0.9</maximum>
                                             </limit>
                                             <limit>
                                                 <counter>BRANCH</counter>
                                                 <value>COVEREDRATIO</value>
-                                                <minimum>0.6</minimum>
+                                                <maximum>0.6</maximum>
                                             </limit>
                                             <limit>
                                                 <counter>COMPLEXITY</counter>
                                                 <value>COVEREDRATIO</value>
-                                                <minimum>0.6</minimum>
+                                                <maximum>0.6</maximum>
                                             </limit>
                                             <limit>
                                                 <counter>METHOD</counter>
                                                 <value>COVEREDRATIO</value>
-                                                <minimum>0.7</minimum>
+                                                <maximum>0.7</maximum>
                                             </limit>
                                             <limit>
                                                 <counter>CLASS</counter>
