@@ -47,6 +47,11 @@ public class ItemServiceImpl implements ItemService {
                 .findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Вещь не найдена"));
 
+        userRepository
+                .findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+
+
         List<CommentDto> commentDtos = CommentMapper.toCommentDto(commentRepository.findAllCommentByItemId(itemId));
         BookingNextLastDto lastBooking = bookingMapper.toBookingLastNextDto(getLatestBooking(item.getId()));
         BookingNextLastDto nextBooking = bookingMapper.toBookingLastNextDto(getNextBooking(item.getId()));

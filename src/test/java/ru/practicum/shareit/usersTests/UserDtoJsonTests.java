@@ -1,4 +1,4 @@
-package ru.practicum.shareit.usersTest;
+package ru.practicum.shareit.usersTests;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

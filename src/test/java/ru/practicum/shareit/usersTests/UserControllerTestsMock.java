@@ -1,4 +1,4 @@
-package ru.practicum.shareit.usersTest;
+package ru.practicum.shareit.usersTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;

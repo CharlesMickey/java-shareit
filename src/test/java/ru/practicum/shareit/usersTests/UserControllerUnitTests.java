@@ -1,10 +1,8 @@
-package ru.practicum.shareit.usersTest;
+package ru.practicum.shareit.usersTests;
 
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -19,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserControllerUnitTests {
     @Autowired
     private UserController userController;
@@ -31,7 +28,7 @@ public class UserControllerUnitTests {
     void init() {
         user = new User();
         user.setName("11");
-        user.setEmail("11@email.com");
+        user.setEmail("1141414141@email.com");
 
 
         userDto = new UserDto();
@@ -48,6 +45,8 @@ public class UserControllerUnitTests {
 
     @Test
     void updateTest() throws Throwable {
+
+        user.setEmail("1werwer@er.ru");
         userController.createUser(user);
         UserDto userDto = new UserDto();
         userDto.setName("2 name");
@@ -63,15 +62,15 @@ public class UserControllerUnitTests {
 
     @Test
     void deleteTest() throws Throwable {
-        user.setEmail("1@er.ru");
+        user.setEmail("1egwev@er.ru");
         UserDto userDto = userController.createUser(user);
-        assertEquals(3, userController.getListUsers().size());
+        assertEquals(13, userController.getListUsers().size());
         userController.deleteUser(user.getId());
-        assertEquals(2, userController.getListUsers().size());
+        assertEquals(12, userController.getListUsers().size());
     }
 
     @Test
     void getByWrongIdTest() {
-        assertThrows(NotFoundException.class, () -> userController.getUserById(1L));
+        assertThrows(NotFoundException.class, () -> userController.getUserById(11408L));
     }
 }
