@@ -6,6 +6,8 @@ import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.Booking;
@@ -56,12 +58,18 @@ public class ItemServiceImpl implements ItemService {
 
     }
 
-    public List<ItemWithBookingsDateDto> getAllItemsByOwnerId(Long id) {
-        User owner = userRepository
+    public List<ItemWithBookingsDateDto> getAllItemsByOwnerId(Long id, Integer from, Integer size) {
+        if (size <= 0 || from < 0) {
+            throw new BadRequestException("Неверные параметры пагинации");
+        }
+
+        userRepository
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
-        List<Item> items = itemRepository.findAllItemsByOwnerId(id);
+        Pageable pageable = PageRequest.of(((int) Math.floor((double) from / size)), size);
+
+        List<Item> items = itemRepository.findAllItemsByOwnerId(id, pageable).getContent();
         List<ItemWithBookingsDateDto> result = new ArrayList<>();
 
         for (Item item : items) {
@@ -92,8 +100,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
 
-    public List<ItemDto> searchItems(String text) {
-        return itemMapper.toItemDto(itemRepository.search(text));
+    public List<ItemDto> searchItems(String text, Integer from, Integer size) {
+        if (size <= 0 || from < 0) {
+            throw new BadRequestException("Неверные параметры пагинации");
+        }
+
+        Pageable pageable = PageRequest.of(((int) Math.floor((double) from / size)), size);
+        return itemMapper.toItemDto(itemRepository.search(text, pageable).getContent());
 
     }
 
@@ -102,7 +115,7 @@ public class ItemServiceImpl implements ItemService {
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
-        if(itemDto.getRequestId() != null ) {
+        if (itemDto.getRequestId() != null) {
             ItemRequest itemRequest = requestRepository.findById(itemDto.getRequestId())
                     .orElseThrow(() -> new NotFoundException("Запрос не найден"));
 

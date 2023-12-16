@@ -12,9 +12,9 @@ public interface ItemService {
 
     ItemWithBookingsDateDto getItemById(Long id, Long userId);
 
-    List<ItemWithBookingsDateDto> getAllItemsByOwnerId(Long id);
+    List<ItemWithBookingsDateDto> getAllItemsByOwnerId(Long id, Integer from, Integer size);
 
-    List<ItemDto> searchItems(String text);
+    List<ItemDto> searchItems(String text, Integer from, Integer size);
 
     ItemDto createItem(Long id, ItemDto itemDto);
 

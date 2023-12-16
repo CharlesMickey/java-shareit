@@ -27,9 +27,24 @@ public class ItemController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    public List<ItemWithBookingsDateDto> getAllItemsByOwnerId(@RequestHeader(HttpConstants.X_SHARER_USER_ID) Long id) {
+    public List<ItemWithBookingsDateDto> getAllItemsByOwnerId(
+            @RequestHeader(HttpConstants.X_SHARER_USER_ID) Long id,
+            @RequestParam(value = "from", defaultValue = "0") Integer from,
+            @RequestParam(value = "size", defaultValue = "10") Integer size) {
         log.info("Get request /items, owner id: {}", id);
-        return itemService.getAllItemsByOwnerId(id);
+        return itemService.getAllItemsByOwnerId(id, from, size);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/search")
+    public List<ItemDto> searchAllItemsByOwnerId(
+            @RequestParam(value = "text") String text,
+            @RequestParam(value = "from", defaultValue = "0") Integer from,
+            @RequestParam(value = "size", defaultValue = "10") Integer size) {
+        if (text.isBlank()) return new ArrayList<>();
+
+        log.info("Get search items, request: {}", text);
+        return itemService.searchItems(text, from, size);
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -39,15 +54,6 @@ public class ItemController {
             @PathVariable Long id) {
         log.info("Get request /items, item id: {}", id);
         return itemService.getItemById(id, userId);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/search")
-    public List<ItemDto> searchAllItemsByOwnerId(@RequestParam(value = "text") String text) {
-        if (text.isBlank()) return new ArrayList<>();
-
-        log.info("Get search items, request: {}", text);
-        return itemService.searchItems(text);
     }
 
     @ResponseStatus(HttpStatus.CREATED)

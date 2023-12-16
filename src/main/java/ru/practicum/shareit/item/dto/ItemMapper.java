@@ -25,7 +25,7 @@ public interface ItemMapper {
 
     List<ItemDto> toItemDto(List<Item> listItems);
 
-    @Mapping( target = "id", ignore = true)
+    @Mapping(target = "id", ignore = true)
     @Mapping(source = "itemDto.name", target = "name")
     Item toItem(User owner, ItemDto itemDto);
 

@@ -14,7 +14,6 @@ public interface BookingMapper {
 
     BookingMapper INSTANCE = Mappers.getMapper(BookingMapper.class);
 
-
     BookingDto toBookingDto(Booking booking);
 
     @Mapping(source = "booking.item.id", target = "itemId")
@@ -28,6 +27,5 @@ public interface BookingMapper {
     @Mapping(source = "booker", target = "booker")
     @Mapping(source = "status", target = "status")
     Booking toBooking(BookingDto bookingDto, Item item, User booker, BookingStatus status);
-
 
 }

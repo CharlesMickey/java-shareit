@@ -1,6 +1,9 @@
 package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.BadRequestException;
@@ -63,21 +66,30 @@ public class BookingServiceImpl implements BookingService {
         return bookingMapper.toBookingDto(booking);
     }
 
-
-    public List<BookingDto> findUserBookingsWithState(Long userId, String status) {
+    public List<BookingDto> findUserBookingsWithState(Long userId, String status, Integer from, Integer size) {
+        if (size <= 0 || from < 0) {
+            throw new BadRequestException("Неверные параметры пагинации");
+        }
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
+        Pageable pageable = PageRequest.of(((int) Math.floor((double) from / size)), size);
+
         return bookingMapper.toBookingDto(bookingRepository
-                .findUserBookingsWithState(userId, mapToStateString(status)));
+                .findUserBookingsWithState(userId, mapToStateString(status), pageable).getContent());
     }
 
-    public List<BookingDto> findOwnerBookingsWithState(Long ownerId, String status) {
+    public List<BookingDto> findOwnerBookingsWithState(Long ownerId, String status, Integer from, Integer size) {
+        if (size <= 0 || from < 0) {
+            throw new BadRequestException("Неверные параметры пагинации");
+        }
         userRepository.findById(ownerId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
+        Pageable pageable = PageRequest.of(((int) Math.floor((double) from / size)), size);
+
         return bookingMapper.toBookingDto(bookingRepository
-                .findOwnerBookingsWithState(ownerId, mapToStateString(status)));
+                .findOwnerBookingsWithState(ownerId, mapToStateString(status), pageable).getContent());
     }
 
     private String mapToStateString(String state) {

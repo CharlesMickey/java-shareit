@@ -46,4 +46,18 @@ public class ItemRequestController {
 
         return itemRequestService.getItemRequests(userId, requestId);
     }
+
+
+    @GetMapping("all")
+    public List<ItemRequestDto> getAllItemRequests(
+            @RequestHeader(HttpConstants.X_SHARER_USER_ID) Long userId,
+            @RequestParam(value = "from", defaultValue = "0") Integer from,
+            @RequestParam(value = "size", defaultValue = "10") Integer size) {
+
+        log.info("Get request /requests/all, userId: {}, from: {}, size: {}", userId, from, size);
+
+
+        return  itemRequestService.getAllItemRequests(userId, from, size);
+
+    }
 }

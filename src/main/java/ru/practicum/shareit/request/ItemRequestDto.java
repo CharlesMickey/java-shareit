@@ -9,7 +9,6 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.validated.Create;
 
-import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 
 @Data

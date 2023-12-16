@@ -10,8 +10,8 @@ public interface BookingService {
 
     BookingDto getBookingById(Long bookingId, Long userId);
 
-    List<BookingDto> findUserBookingsWithState(Long userId, String status);
+    List<BookingDto> findUserBookingsWithState(Long userId, String status, Integer from, Integer size);
 
-    List<BookingDto> findOwnerBookingsWithState(Long ownerId, String status);
+    List<BookingDto> findOwnerBookingsWithState(Long ownerId, String status, Integer from, Integer size);
 
 }
