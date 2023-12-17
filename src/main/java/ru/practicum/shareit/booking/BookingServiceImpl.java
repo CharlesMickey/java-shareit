@@ -91,7 +91,7 @@ public class BookingServiceImpl implements BookingService {
                 .findOwnerBookingsWithState(ownerId, mapToStateString(status), pageable).getContent());
     }
 
-    private String mapToStateString(String state) {
+    public String mapToStateString(String state) {
         switch (state.toUpperCase()) {
             case "CURRENT":
                 return "CURRENT";
