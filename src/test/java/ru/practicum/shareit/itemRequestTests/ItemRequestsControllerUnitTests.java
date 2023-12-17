@@ -91,7 +91,7 @@ public class ItemRequestsControllerUnitTests {
 
         UserDto userDto1 = userController.createUser(user);
         ItemRequestDto itemRequest = itemRequestController.createItemRequest(userDto1.getId(), itemRequestDto);
-        assertEquals(3L, itemRequestController.getItemRequest(userDto1.getId(), itemRequest.getId()).getId());
+        assertEquals(itemRequest.getId(), itemRequestController.getItemRequest(userDto1.getId(), itemRequest.getId()).getId());
     }
 
     @Test
