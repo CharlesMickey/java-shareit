@@ -172,7 +172,7 @@ public class BookingControllerUnitTests {
                 .status(BookingStatus.APPROVED)
                 .itemId(item.getId()).build());
         assertEquals(BookingStatus.WAITING, bookingController.getBookingById(user13.getId(), booking.getId()).getStatus());
-        bookingController.approvingBooking(user.getId(), booking.getId(), true);
+        bookingController.approvingBooking(usewer.getId(), booking.getId(), true);
         assertEquals(BookingStatus.APPROVED, bookingController
                 .getBookingById(user13.getId(), booking.getId()).getStatus());
     }
