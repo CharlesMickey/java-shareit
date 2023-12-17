@@ -17,6 +17,7 @@ import ru.practicum.shareit.user.controller.UserController;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -156,7 +157,7 @@ public class BookingControllerUnitTests {
         ItemDto item = itemController.createItem(usere.getId(), itemDto);
         UserDto user13 = userController.createUser(userM2);
         bookingDto.setEnd(LocalDateTime.of(2021, 9, 24, 12, 30));
-        assertThrows(NotFoundException.class, () -> bookingController
+        assertThrows(ConstraintViolationException.class, () -> bookingController
                 .createBooking(user13.getId(), bookingDto));
     }
 
