@@ -10,6 +10,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.controller.UserController;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.model.User;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,8 +22,12 @@ public class UserControllerUnitTests {
     @Autowired
     private UserController userController;
 
+    @Autowired
+    private UserMapper userMapper;
+
     private UserDto userDto;
     private User user;
+
 
     @BeforeEach
     void init() {
@@ -44,6 +49,12 @@ public class UserControllerUnitTests {
     }
 
     @Test
+    void userMapperTest() {
+        UserDto userAfterMapp = userMapper.toUserDto(user);
+        assertEquals(userAfterMapp.getEmail(), user.getEmail());
+    }
+
+    @Test
     void updateTest() throws Throwable {
 
         user.setEmail("1werwer@er.ru");
@@ -56,7 +67,7 @@ public class UserControllerUnitTests {
     }
 
     @Test
-    void updateByWrongUserTest()  {
+    void updateByWrongUserTest() {
         assertThrows(NotFoundException.class, () -> userController.updateUser(145L, userDto));
     }
 
