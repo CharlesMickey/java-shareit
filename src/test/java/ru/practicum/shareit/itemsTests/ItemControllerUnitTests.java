@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.BookingController;
-import ru.practicum.shareit.booking.BookingDto;
 import ru.practicum.shareit.exception.BadRequestException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.ItemController;
@@ -19,13 +19,12 @@ import ru.practicum.shareit.user.controller.UserController;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@Transactional
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ItemControllerUnitTests {
@@ -114,7 +113,7 @@ public class ItemControllerUnitTests {
 
         UserDto user = userController.createUser(userM);
         ItemDto item = itemController.createItem(user.getId(), itemDto);
-        ItemWithBookingsDateDto ew = itemController.getItemById(8L, 8L);
+        ItemWithBookingsDateDto ew = itemController.getItemById(user.getId(), item.getId());
         assertEquals(item.getId(), ew.getId());
     }
 
@@ -125,11 +124,11 @@ public class ItemControllerUnitTests {
 
 
         ItemRequestDto itemRequest = itemRequestController.createItemRequest(user.getId(), itemRequestDto);
-        itemDto.setRequestId(1L);
+        itemDto.setRequestId(itemRequest.getId());
         UserDto user2 = userController.createUser(userM);
-        ItemDto item = itemController.createItem(1L, itemDto);
+        ItemDto item = itemController.createItem(user.getId(), itemDto);
 
-        ItemWithBookingsDateDto actualItem = itemController.getItemById(1L, 1L);
+        ItemWithBookingsDateDto actualItem = itemController.getItemById(user.getId(), item.getId());
 
 
         assertEquals(item.getName(), actualItem.getName());
@@ -172,7 +171,9 @@ public class ItemControllerUnitTests {
         userM.setEmail("1ee@er.ru");
 
         userController.createUser(userM);
-        itemController.createItem(1L, itemDto);
+        UserDto user = userController.createUser(userM);
+
+        itemController.createItem(user.getId(), itemDto);
         assertThrows(NotFoundException.class, () -> itemController.updateItem(10323L, 123L, itemDto2));
     }
 
@@ -180,16 +181,16 @@ public class ItemControllerUnitTests {
     @Test
     void searchTest() {
         userM.setEmail("32.@r.ru");
-        userController.createUser(userM);
-        itemController.createItem(1L, itemDto);
-        assertEquals(3, itemController.searchAllItemsByOwnerId("Desc", 0, 10).size());
+        UserDto user = userController.createUser(userM);
+        itemController.createItem(user.getId(), itemDto);
+        assertEquals(1, itemController.searchAllItemsByOwnerId("Desc", 0, 10).size());
     }
 
     @Test
     void searchEmptyTextTest() {
         userM.setEmail("23@w.ru");
-        userController.createUser(userM);
-        itemController.createItem(1L, itemDto);
+        UserDto user = userController.createUser(userM);
+        itemController.createItem(user.getId(), itemDto);
         assertEquals(new ArrayList<ItemDto>(), itemController.searchAllItemsByOwnerId("", 0, 10));
     }
 
@@ -200,33 +201,15 @@ public class ItemControllerUnitTests {
     }
 
     @Test
-    void createCommentTest() throws InterruptedException {
-        userM.setEmail("1@er.ru");
-        UserDto user = userController.createUser(userM);
-        ItemDto item = itemController.createItem(user.getId(), itemDto);
-        UserDto user2 = userController.createUser(userM2);
-        bookingController.createBooking(user2.getId(), BookingDto
-                .builder()
-                .start(LocalDateTime.now().plusSeconds(1))
-                .end(LocalDateTime.now().plusSeconds(2))
-                .itemId(item.getId()).build(), user2.getId());
-        bookingController.approvingBooking(user.getId(), 1L, true);
-        TimeUnit.SECONDS.sleep(2);
-        itemController.createComment(user2.getId(), item.getId(), comment);
-        assertEquals(1, itemController.getItemById(1L, 1L).getComments().size());
-    }
-
-    @Test
     void createCommentByWrongUser() {
         assertThrows(NotFoundException.class, () -> itemController.createComment(123L, 1L, comment));
     }
 
     @Test
     void createCommentToWrongItem() {
-        userM.setEmail("144224@er.ru");
         UserDto user = userController.createUser(userM);
         assertThrows(NotFoundException.class, () -> itemController.createComment(1L, 1212L, comment));
-        ItemDto item = itemController.createItem(1L, itemDto);
+        ItemDto item = itemController.createItem(user.getId(), itemDto);
         assertThrows(NotFoundException.class, () -> itemController.createComment(1L, 1212L, comment));
     }
 

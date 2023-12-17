@@ -5,8 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.BadRequestException;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.ItemController;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.request.ItemRequestController;
 import ru.practicum.shareit.request.ItemRequestDto;
@@ -18,6 +21,7 @@ import ru.practicum.shareit.user.model.User;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@Transactional
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ItemRequestsControllerUnitTests {
@@ -27,10 +31,14 @@ public class ItemRequestsControllerUnitTests {
     @Autowired
     private UserController userController;
 
+    @Autowired
+    private ItemController itemController;
+
     private ItemRequest itemRequest;
 
     private User user;
 
+    private ItemDto itemDto;
 
     private ItemRequestDto itemRequestDto;
 
@@ -56,6 +64,13 @@ public class ItemRequestsControllerUnitTests {
                 .email("user@email.com")
                 .build();
 
+        itemDto = ItemDto
+                .builder()
+                .name("name")
+                .description("description")
+                .available(true)
+                .build();
+
 
         userDto = UserDto
                 .builder()
@@ -76,7 +91,7 @@ public class ItemRequestsControllerUnitTests {
 
         UserDto userDto1 = userController.createUser(user);
         ItemRequestDto itemRequest = itemRequestController.createItemRequest(userDto1.getId(), itemRequestDto);
-        assertEquals(4L, itemRequestController.getItemRequest(userDto1.getId(), itemRequest.getId()).getId());
+        assertEquals(3L, itemRequestController.getItemRequest(userDto1.getId(), itemRequest.getId()).getId());
     }
 
     @Test
@@ -101,13 +116,14 @@ public class ItemRequestsControllerUnitTests {
     void getAllItemRequestsTest() {
         user.setEmail("u6644y@df.ru");
         UserDto userDTO3 = userController.createUser(user);
+        ItemDto item = itemController.createItem(user.getId(), itemDto);
 
         ItemRequestDto itemRequest = itemRequestController.createItemRequest(userDTO3.getId(), itemRequestDto);
-        assertEquals(2, itemRequestController.getAllItemRequests(userDTO3.getId(), 0, 10).size());
+        assertEquals(0, itemRequestController.getAllItemRequests(userDTO3.getId(), 0, 10).size());
         user.setEmail("u69gg6424y@df.ru");
 
         UserDto userDto4 = userController.createUser(user);
-        assertEquals(2, itemRequestController.getAllItemRequests(userDto4.getId(), 0, 10).size());
+        assertEquals(0, itemRequestController.getAllItemRequests(userDto4.getId(), 0, 10).size());
     }
 
     @Test

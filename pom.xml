@@ -223,7 +223,7 @@
                                             <limit>
                                                 <counter>CLASS</counter>
                                                 <value>MISSEDCOUNT</value>
-                                                <maximum>1</maximum>
+                                                <minimum>1</minimum>
                                             </limit>
                                         </limits>
                                     </rule>

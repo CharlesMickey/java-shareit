@@ -22,7 +22,7 @@ public class BookingController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
     public BookingDto createBooking(@RequestHeader(HttpConstants.X_SHARER_USER_ID) Long bookerId,
-                                    @Validated(Create.class) @RequestBody BookingDto bookingDto, Long id) {
+                                    @Validated(Create.class) @RequestBody BookingDto bookingDto) {
         log.info("Post request /users, data transmitted: {}", bookingDto);
 
         return bookingService.createBooking(bookerId, bookingDto);
