@@ -146,7 +146,7 @@ public class BookingControllerUnitTests {
         itemDto.setAvailable(false);
         ItemDto item = itemController.createItem(user12.getId(), itemDto);
         UserDto user134 = userController.createUser(userM2);
-        assertThrows(NotFoundException.class, () -> bookingController
+        assertThrows(BadRequestException.class, () -> bookingController
                 .createBooking(user134.getId(), bookingDto));
     }
 
@@ -155,7 +155,7 @@ public class BookingControllerUnitTests {
         UserDto usere = userController.createUser(user);
         ItemDto item = itemController.createItem(usere.getId(), itemDto);
         UserDto user13 = userController.createUser(userM2);
-        bookingNextLastDto.setEnd(LocalDateTime.of(2022, 9, 24, 12, 30));
+        bookingDto.setEnd(LocalDateTime.of(2021, 9, 24, 12, 30));
         assertThrows(NotFoundException.class, () -> bookingController
                 .createBooking(user13.getId(), bookingDto));
     }
@@ -255,7 +255,7 @@ public class BookingControllerUnitTests {
                 .build());
         UserDto user1 = userController.createUser(userM2);
 
-        assertThrows(NotFoundException.class, () -> bookingController
+        assertThrows(BadRequestException.class, () -> bookingController
                 .createBooking(user1.getId(), bookingDto));
 
 
