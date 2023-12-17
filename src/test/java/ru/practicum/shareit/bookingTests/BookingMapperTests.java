@@ -64,9 +64,14 @@ public class BookingMapperTests {
     @Test
     void toBookingDtoWithNullInputShouldReturnNull() {
         BookingDto bookingDto = bookingMapper.toBookingDto((Booking) null);
-        List<BookingDto> bookingDtoList = bookingMapper.toBookingDto(Collections.emptyList());
 
         assertNull(bookingDto);
+    }
+
+    @Test
+    void toListBookingDtoWithNullInputShouldReturnListNull() {
+        List<BookingDto> bookingDtoList = bookingMapper.toBookingDto(Collections.emptyList());
+
         assertTrue(bookingDtoList.isEmpty());
     }
 
