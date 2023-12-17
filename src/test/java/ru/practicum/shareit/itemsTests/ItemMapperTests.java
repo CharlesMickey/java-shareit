@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import org.springframework.test.annotation.DirtiesContext;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.dto.ItemWithBookingsDateDto;
@@ -13,7 +14,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-@SpringBootTest(properties = "db.name=test")
+@SpringBootTest()
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ItemMapperTests {
 
     @Autowired

@@ -15,7 +15,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest(properties = "db.name=test")
+@SpringBootTest()
 @ExtendWith(SpringExtension.class)
 public class ItemRequestCreateDtoTest {
 
