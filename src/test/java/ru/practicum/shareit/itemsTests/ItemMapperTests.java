@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-@SpringBootTest
+@SpringBootTest(properties = "db.name=test")
 public class ItemMapperTests {
 
     @Autowired
