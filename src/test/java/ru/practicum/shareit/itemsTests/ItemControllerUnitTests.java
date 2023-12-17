@@ -20,9 +20,9 @@ import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
@@ -217,6 +217,34 @@ public class ItemControllerUnitTests {
     void getAllWithWrongFrom() {
         assertThrows(BadRequestException.class, () -> itemController
                 .getAllItemsByOwnerId(1L, -1, 10));
+    }
+
+    @Test
+    void getAllItemsByOwnerId_ReturnsCorrectItems() {
+        userM.setEmail("testuser@example.com");
+        UserDto user = userController.createUser(userM);
+
+        ItemDto item1 = itemController.createItem(user.getId(), itemDto);
+        ItemDto item2 = itemController.createItem(user.getId(), itemDto2);
+
+        List<ItemWithBookingsDateDto> result = itemController.getAllItemsByOwnerId(user.getId(), 0, 10);
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+
+        assertEquals(item1.getName(), result.get(0).getName());
+        assertEquals(item2.getName(), result.get(1).getName());
+    }
+
+    @Test
+    void getAllItemsByOwnerId_InvalidPaginationParameters_ThrowsBadRequestException() {
+        userM.setEmail("testuser@example.com");
+        UserDto user = userController.createUser(userM);
+
+        assertThrows(BadRequestException.class, () -> itemController
+                .getAllItemsByOwnerId(user.getId(), -1, 10));
+        assertThrows(BadRequestException.class, () -> itemController
+                .getAllItemsByOwnerId(user.getId(), 0, -10));
     }
 }
 
