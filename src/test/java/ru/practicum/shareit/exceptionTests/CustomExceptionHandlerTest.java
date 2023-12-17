@@ -1,69 +1,86 @@
-package ru.practicum.shareit;
+package ru.practicum.shareit.exceptionTests;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import ru.practicum.shareit.exception.*;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class CustomExceptionHandlerTest {
 
     @Test
+    void handleValidationException_ReturnsBadRequestWithErrors() throws NoSuchMethodException {
+        CustomExceptionHandler customExceptionHandler = new CustomExceptionHandler();
+        MethodArgumentNotValidException ex = createValidationException();
+
+        ResponseEntity<Object> responseEntity = customExceptionHandler.handleValidationException(ex);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        Map<?, ?> responseBody = (Map<?, ?>) responseEntity.getBody();
+        assertNotNull(responseBody.get("timestamp"));
+        assertNotNull(responseBody.get("fieldName"));
+        assertEquals("Field error message", responseBody.get("fieldName"));
+    }
+
+    private MethodArgumentNotValidException createValidationException() throws NoSuchMethodException {
+        BindingResult bindingResult = new BeanPropertyBindingResult(new Object(), "objectName");
+        bindingResult.addError(new FieldError(
+                "objectName", "fieldName", "Field error message"));
+        return new MethodArgumentNotValidException(
+                new MethodParameter(CustomExceptionHandler.class.getMethod("handleValidationException", MethodArgumentNotValidException.class), 0),
+                bindingResult);
+    }
+
+    @Test
     void handleNotFoundException_ReturnsNotFound() {
-        // Arrange
         CustomExceptionHandler customExceptionHandler = new CustomExceptionHandler();
         NotFoundException ex = new NotFoundException("Not found");
 
-        // Act
         ResponseEntity<Object> responseEntity = customExceptionHandler.handleNotFoundException(ex);
 
-        // Assert
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertCommonResponseAttributes(responseEntity.getBody(), "NOT_FOUND", "Not found");
     }
 
     @Test
     void handleUnsupportedStatusException_ReturnsBadRequest() {
-        // Arrange
         CustomExceptionHandler customExceptionHandler = new CustomExceptionHandler();
         UnsupportedStatusException ex = new UnsupportedStatusException("Unsupported status");
 
-        // Act
         ResponseEntity<Object> responseEntity = customExceptionHandler.handleUnsupportedStatusException(ex);
 
-        // Assert
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertCommonResponseAttributes(responseEntity.getBody(), "Unknown state: UNSUPPORTED_STATUS", "Unsupported status");
     }
 
     @Test
     void handleConflictException_ReturnsConflict() {
-        // Arrange
         CustomExceptionHandler customExceptionHandler = new CustomExceptionHandler();
         ConflictException ex = new ConflictException("Conflict");
 
-        // Act
         ResponseEntity<Object> responseEntity = customExceptionHandler.handleValidationException(ex);
 
-        // Assert
         assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
         assertCommonResponseAttributes(responseEntity.getBody(), "CONFLICT", "Conflict");
     }
 
     @Test
     void handleValidationException_ReturnsBadRequest() {
-        // Arrange
         CustomExceptionHandler customExceptionHandler = new CustomExceptionHandler();
         BadRequestException ex = new BadRequestException("Bad request");
 
-        // Act
         ResponseEntity<Object> responseEntity = customExceptionHandler.handleValidationException(ex);
 
-        // Assert
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertCommonResponseAttributes(responseEntity.getBody(), "BAD_REQUEST", "Bad request");
     }
