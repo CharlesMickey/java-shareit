@@ -12,9 +12,10 @@ import ru.practicum.shareit.status.BookingStatus;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class BookingMapperTests {
@@ -62,11 +63,49 @@ public class BookingMapperTests {
 
     @Test
     void toBookingDtoWithNullInputShouldReturnNull() {
-
         BookingDto bookingDto = bookingMapper.toBookingDto((Booking) null);
+        List<BookingDto> bookingDtoList = bookingMapper.toBookingDto(Collections.emptyList());
 
         assertNull(bookingDto);
+        assertTrue(bookingDtoList.isEmpty());
     }
+
+
+    @Test
+    void toBookingLastNextDtoWithNullInputShouldReturnNull() {
+
+        BookingNextLastDto bookingNextLastDto = bookingMapper.toBookingLastNextDto(null);
+
+        assertNull(bookingNextLastDto);
+    }
+
+
+    @Test
+    void toBookingWithNullBookingDtoShouldMapOtherFieldsCorrectly() {
+        Item item = new Item();
+        User user = new User();
+
+        Booking result = bookingMapper.toBooking(null, item, user, BookingStatus.APPROVED);
+
+
+        assertNull(result.getId());
+        assertEquals(item, result.getItem());
+        assertEquals(user, result.getBooker());
+        assertEquals(BookingStatus.APPROVED, result.getStatus());
+    }
+
+    @Test
+    void toBookingWithNullInputShouldReturnNull() {
+        Booking allNull = bookingMapper.toBooking(
+                (BookingDto) null,
+                (Item) null,
+                (User) null,
+                (BookingStatus) null);
+
+
+        assertNull(allNull);
+    }
+
 
 }
 
