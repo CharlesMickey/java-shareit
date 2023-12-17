@@ -3,6 +3,7 @@ package ru.practicum.shareit.usersTests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -22,8 +23,7 @@ public class UserControllerUnitTests {
     @Autowired
     private UserController userController;
 
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper  = Mappers.getMapper(UserMapper.class);
 
     private UserDto userDto;
     private User user;
