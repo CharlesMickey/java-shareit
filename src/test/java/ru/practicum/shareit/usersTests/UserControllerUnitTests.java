@@ -3,7 +3,6 @@ package ru.practicum.shareit.usersTests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -11,7 +10,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.controller.UserController;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.model.User;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,11 +21,8 @@ public class UserControllerUnitTests {
     @Autowired
     private UserController userController;
 
-    private final UserMapper userMapper  = Mappers.getMapper(UserMapper.class);
-
     private UserDto userDto;
     private User user;
-
 
     @BeforeEach
     void init() {
@@ -49,12 +44,6 @@ public class UserControllerUnitTests {
     }
 
     @Test
-    void userMapperTest() {
-        UserDto userAfterMapp = userMapper.toUserDto(user);
-        assertEquals(userAfterMapp.getEmail(), user.getEmail());
-    }
-
-    @Test
     void updateTest() throws Throwable {
 
         user.setEmail("1werwer@er.ru");
@@ -67,7 +56,7 @@ public class UserControllerUnitTests {
     }
 
     @Test
-    void updateByWrongUserTest() {
+    void updateByWrongUserTest()  {
         assertThrows(NotFoundException.class, () -> userController.updateUser(145L, userDto));
     }
 
