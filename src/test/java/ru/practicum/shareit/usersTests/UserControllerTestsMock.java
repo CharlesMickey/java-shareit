@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
+import ru.practicum.shareit.constants.HttpConstants;
 import ru.practicum.shareit.user.controller.UserController;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
@@ -55,7 +56,7 @@ public class UserControllerTestsMock {
         mvc.perform(get("/users")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 14L)
+                        .header(HttpConstants.X_SHARER_USER_ID, 14L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(List.of(userDto))));
@@ -68,7 +69,7 @@ public class UserControllerTestsMock {
         mvc.perform(get("/users/14")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 14L)
+                        .header(HttpConstants.X_SHARER_USER_ID, 14L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(userDto)));
@@ -82,7 +83,7 @@ public class UserControllerTestsMock {
                         .content(mapper.writeValueAsString(userDto))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 14L)
+                        .header(HttpConstants.X_SHARER_USER_ID, 14L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(content().json(mapper.writeValueAsString(userDto)));
@@ -96,7 +97,7 @@ public class UserControllerTestsMock {
                         .content(mapper.writeValueAsString(userDto))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 14L)
+                        .header(HttpConstants.X_SHARER_USER_ID, 14L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(userDto)));

@@ -1,10 +1,10 @@
 package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.customPageRequest.CustomPageRequest;
 import ru.practicum.shareit.exception.BadRequestException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.UnsupportedStatusException;
@@ -72,7 +72,7 @@ public class BookingServiceImpl implements BookingService {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
-        Pageable pageable = PageRequest.of(((int) Math.floor((double) from / size)), size);
+        Pageable pageable = CustomPageRequest.customOf(from, size);
 
         return bookingMapper.toBookingDto(bookingRepository
                 .findUserBookingsWithState(userId, mapToStateString(status), pageable).getContent());
@@ -85,7 +85,7 @@ public class BookingServiceImpl implements BookingService {
         userRepository.findById(ownerId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
-        Pageable pageable = PageRequest.of(((int) Math.floor((double) from / size)), size);
+        Pageable pageable = CustomPageRequest.customOf(from, size);
 
         return bookingMapper.toBookingDto(bookingRepository
                 .findOwnerBookingsWithState(ownerId, mapToStateString(status), pageable).getContent());

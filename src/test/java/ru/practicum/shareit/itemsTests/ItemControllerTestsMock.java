@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.constants.HttpConstants;
 import ru.practicum.shareit.item.ItemController;
 import ru.practicum.shareit.item.comment.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -40,7 +41,6 @@ public class ItemControllerTestsMock {
 
     @Autowired
     private MockMvc mvc;
-
 
     private ItemWithBookingsDateDto itemWithBookingsDateDto;
 
@@ -90,7 +90,7 @@ public class ItemControllerTestsMock {
         mvc.perform(get("/items")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(HttpConstants.X_SHARER_USER_ID, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(List.of(itemWithBookingsDateDto))));
@@ -103,7 +103,7 @@ public class ItemControllerTestsMock {
         mvc.perform(get("/items/1")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(HttpConstants.X_SHARER_USER_ID, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(itemWithBookingsDateDto)));
@@ -117,7 +117,7 @@ public class ItemControllerTestsMock {
                         .content(mapper.writeValueAsString(itemDto))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(HttpConstants.X_SHARER_USER_ID, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(content().json(mapper.writeValueAsString(itemDto)));
@@ -131,7 +131,7 @@ public class ItemControllerTestsMock {
                         .content(mapper.writeValueAsString(itemDto))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(HttpConstants.X_SHARER_USER_ID, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(itemDto)));
@@ -144,7 +144,7 @@ public class ItemControllerTestsMock {
         mvc.perform(get("/items/search?text='name'")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(HttpConstants.X_SHARER_USER_ID, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(List.of(itemDto))));
@@ -158,7 +158,7 @@ public class ItemControllerTestsMock {
                         .content(mapper.writeValueAsString(commentDto))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(HttpConstants.X_SHARER_USER_ID, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(commentDto)));

@@ -5,8 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.validated.Create;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,6 +23,7 @@ public class ItemRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Заполните описание запроса")
     @Column
     private String description;
 

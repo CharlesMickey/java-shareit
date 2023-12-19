@@ -16,6 +16,7 @@ import ru.practicum.shareit.booking.BookingController;
 import ru.practicum.shareit.booking.BookingDto;
 import ru.practicum.shareit.booking.BookingNextLastDto;
 import ru.practicum.shareit.booking.BookingService;
+import ru.practicum.shareit.constants.HttpConstants;
 import ru.practicum.shareit.exception.BadRequestException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
@@ -98,7 +99,7 @@ public class BookingControllerTestsMock {
                         .content(mapper.writeValueAsString(bookingNextLastDto))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(HttpConstants.X_SHARER_USER_ID, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(content().json(mapper.writeValueAsString(bookingDto)));
@@ -112,7 +113,7 @@ public class BookingControllerTestsMock {
         mvc.perform(patch("/bookings/1?approved=true")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(HttpConstants.X_SHARER_USER_ID, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(bookingDto)));
@@ -125,7 +126,7 @@ public class BookingControllerTestsMock {
         mvc.perform(get("/bookings/owner")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(HttpConstants.X_SHARER_USER_ID, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(List.of(bookingDto))));
@@ -138,7 +139,7 @@ public class BookingControllerTestsMock {
         mvc.perform(get("/bookings")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 2L)
+                        .header(HttpConstants.X_SHARER_USER_ID, 2L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(List.of(bookingDto))));
@@ -151,7 +152,7 @@ public class BookingControllerTestsMock {
         mvc.perform(get("/bookings/1")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(HttpConstants.X_SHARER_USER_ID, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(bookingDto)));
@@ -164,7 +165,7 @@ public class BookingControllerTestsMock {
         mvc.perform(get("/bookings?state=twerxt")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(HttpConstants.X_SHARER_USER_ID, 1L)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }

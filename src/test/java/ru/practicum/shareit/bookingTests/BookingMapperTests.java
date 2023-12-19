@@ -1,5 +1,6 @@
 package ru.practicum.shareit.bookingTests;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,9 +24,11 @@ public class BookingMapperTests {
     @Autowired
     private BookingMapper bookingMapper;
 
-    @Test
-    void toBookingDtoShouldMapCorrectly() {
-        Booking booking = new Booking(
+    private Booking booking;
+
+    @BeforeEach
+    void setUp() {
+        booking = new Booking(
                 1L,
                 LocalDateTime.now(),
                 LocalDateTime.now().plusDays(1),
@@ -33,9 +36,11 @@ public class BookingMapperTests {
                 new User(),
                 BookingStatus.WAITING);
 
+    }
 
+    @Test
+    void toBookingDtoShouldMapCorrectly() {
         BookingDto bookingDto = bookingMapper.toBookingDto(booking);
-
 
         assertEquals(1L, bookingDto.getId());
         assertEquals(BookingStatus.WAITING, bookingDto.getStatus());
@@ -44,17 +49,7 @@ public class BookingMapperTests {
 
     @Test
     void toBookingLastNextDtoShouldMapCorrectly() {
-        Booking booking = new Booking(
-                1L,
-                LocalDateTime.now(),
-                LocalDateTime.now().plusDays(1),
-                new Item(),
-                new User(),
-                BookingStatus.WAITING);
-
-
         BookingNextLastDto bookingNextLastDto = bookingMapper.toBookingLastNextDto(booking);
-
 
         assertEquals(1L, bookingNextLastDto.getId());
         assertEquals(BookingStatus.WAITING, bookingNextLastDto.getStatus());
@@ -75,7 +70,6 @@ public class BookingMapperTests {
         assertTrue(bookingDtoList.isEmpty());
     }
 
-
     @Test
     void toBookingLastNextDtoWithNullInputShouldReturnNull() {
 
@@ -84,14 +78,12 @@ public class BookingMapperTests {
         assertNull(bookingNextLastDto);
     }
 
-
     @Test
     void toBookingWithNullBookingDtoShouldMapOtherFieldsCorrectly() {
         Item item = new Item();
         User user = new User();
 
         Booking result = bookingMapper.toBooking(null, item, user, BookingStatus.APPROVED);
-
 
         assertNull(result.getId());
         assertEquals(item, result.getItem());
@@ -107,10 +99,7 @@ public class BookingMapperTests {
                 (User) null,
                 (BookingStatus) null);
 
-
         assertNull(allNull);
     }
-
-
 }
 
