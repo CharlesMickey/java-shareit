@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +12,7 @@ import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingNextLastDto;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.BookingMapper;
+import ru.practicum.shareit.customPageRequest.CustomPageRequest;
 import ru.practicum.shareit.exception.BadRequestException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.comment.CommentDto;
@@ -48,6 +47,11 @@ public class ItemServiceImpl implements ItemService {
                 .findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Вещь не найдена"));
 
+        userRepository
+                .findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+
+
         List<CommentDto> commentDtos = CommentMapper.toCommentDto(commentRepository.findAllCommentByItemId(itemId));
         BookingNextLastDto lastBooking = bookingMapper.toBookingLastNextDto(getLatestBooking(item.getId()));
         BookingNextLastDto nextBooking = bookingMapper.toBookingLastNextDto(getNextBooking(item.getId()));
@@ -67,7 +71,7 @@ public class ItemServiceImpl implements ItemService {
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
-        Pageable pageable = PageRequest.of(((int) Math.floor((double) from / size)), size);
+        Pageable pageable = CustomPageRequest.customOf(from, size);
 
         List<Item> items = itemRepository.findAllItemsByOwnerId(id, pageable).getContent();
         List<ItemWithBookingsDateDto> result = new ArrayList<>();
@@ -105,7 +109,8 @@ public class ItemServiceImpl implements ItemService {
             throw new BadRequestException("Неверные параметры пагинации");
         }
 
-        Pageable pageable = PageRequest.of(((int) Math.floor((double) from / size)), size);
+        Pageable pageable = CustomPageRequest.customOf(from, size);
+
         return itemMapper.toItemDto(itemRepository.search(text, pageable).getContent());
 
     }

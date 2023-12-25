@@ -16,11 +16,13 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("select b from Booking b join fetch b.item i where b.id = :bookingId and i.owner.id = :ownerId")
     Optional<Booking> findBookingByBookingIdAndOwnerId(@Param("bookingId") Long bookingId,
                                                        @Param("ownerId") Long ownerId);
+
     @Query("select b from Booking b " +
             "join fetch b.item i " +
             "where b.id = :bookingId and (i.owner.id = :ownerId or b.booker.id  = :ownerId)")
     Optional<Booking> findBookingByBookingIdAndOwnerIdOrOwnerItemId(@Param("bookingId") Long bookingId,
                                                                     @Param("ownerId") Long ownerId);
+
     @Query("select b from Booking b " +
             "join b.item i " +
             "where b.booker.id = :userId " +
