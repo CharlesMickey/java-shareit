@@ -120,8 +120,8 @@ public class BookingControllerUnitTests {
         UserDto user2 = userController.createUser(userM2);
         BookingDto booking = bookingController.createBooking(user2.getId(), BookingDto
                 .builder()
-                .start(LocalDateTime.of(2023, 12, 24, 12, 30))
-                .end(LocalDateTime.of(2023, 12, 25, 13, 0))
+                .start(LocalDateTime.of(2024, 12, 24, 12, 30))
+                .end(LocalDateTime.of(2024, 12, 25, 13, 0))
                 .status(BookingStatus.APPROVED)
                 .itemId(item.getId()).build());
         assertEquals(booking.getId(), bookingController.getBookingById(user1.getId(), booking.getId()).getId());
@@ -168,8 +168,8 @@ public class BookingControllerUnitTests {
         UserDto user13 = userController.createUser(userM2);
         BookingDto booking = bookingController.createBooking(user13.getId(), BookingDto
                 .builder()
-                .start(LocalDateTime.of(2023, 12, 24, 12, 30))
-                .end(LocalDateTime.of(2023, 12, 25, 13, 0))
+                .start(LocalDateTime.of(2024, 12, 24, 12, 30))
+                .end(LocalDateTime.of(2024, 12, 25, 13, 0))
                 .status(BookingStatus.APPROVED)
                 .itemId(item.getId()).build());
         assertEquals(BookingStatus.WAITING, bookingController.getBookingById(user13.getId(), booking.getId()).getStatus());
@@ -191,8 +191,8 @@ public class BookingControllerUnitTests {
         UserDto user132 = userController.createUser(userM2);
         BookingDto booking = bookingController.createBooking(user132.getId(), BookingDto
                 .builder()
-                .start(LocalDateTime.of(2023, 12, 24, 12, 30))
-                .end(LocalDateTime.of(2023, 12, 25, 13, 0))
+                .start(LocalDateTime.of(2024, 12, 24, 12, 30))
+                .end(LocalDateTime.of(2024, 12, 25, 13, 0))
                 .status(BookingStatus.APPROVED)
                 .itemId(item.getId()).build());
         assertThrows(NotFoundException.class,
@@ -206,8 +206,8 @@ public class BookingControllerUnitTests {
         UserDto user1 = userController.createUser(userM2);
         BookingDto booking = bookingController.createBooking(user1.getId(), BookingDto
                 .builder()
-                .start(LocalDateTime.of(2023, 12, 24, 12, 30))
-                .end(LocalDateTime.of(2023, 12, 25, 13, 0))
+                .start(LocalDateTime.of(2024, 12, 24, 12, 30))
+                .end(LocalDateTime.of(2024, 12, 25, 13, 0))
                 .status(BookingStatus.APPROVED)
                 .itemId(item.getId()).build());
         bookingController.approvingBooking(user3.getId(), booking.getId(), true);
@@ -222,8 +222,8 @@ public class BookingControllerUnitTests {
         UserDto user1 = userController.createUser(userM2);
         BookingDto booking = bookingController.createBooking(user1.getId(), BookingDto
                 .builder()
-                .start(LocalDateTime.of(2023, 12, 24, 12, 30))
-                .end(LocalDateTime.of(2023, 12, 25, 13, 0))
+                .start(LocalDateTime.of(2024, 12, 24, 12, 30))
+                .end(LocalDateTime.of(2024, 12, 25, 13, 0))
                 .status(BookingStatus.APPROVED)
                 .itemId(item.getId()).build());
         assertEquals(1,
