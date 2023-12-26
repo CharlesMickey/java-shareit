@@ -132,7 +132,6 @@ public class BookingControllerUnitTests {
         assertThrows(NotFoundException.class, () -> bookingController.createBooking(1423L, bookingDto));
     }
 
-
     @Test
     void createByOwnerTest() {
         UserDto userqwe = userController.createUser(user);
