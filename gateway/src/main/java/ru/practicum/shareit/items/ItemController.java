@@ -66,8 +66,6 @@ public class ItemController {
             @RequestHeader(HttpConstants.X_SHARER_USER_ID) Long idOwner,
             @Validated(Update.class) @RequestBody ItemDto itemDto) {
         log.info("Patch request /items data transmitted: {}", itemDto);
-
-
         return itemClient.updateItem(idItem, idOwner, itemDto);
     }
 
