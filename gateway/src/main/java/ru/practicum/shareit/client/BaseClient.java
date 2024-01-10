@@ -13,21 +13,21 @@ import org.springframework.web.client.RestTemplate;
 
 public class BaseClient {
 
-    public final RestTemplate rest;
+    protected  final RestTemplate rest;
 
-    public BaseClient(RestTemplate rest) {
+    public  BaseClient(RestTemplate rest) {
         this.rest = rest;
     }
 
-    public ResponseEntity<Object> get(String path) {
+    protected  ResponseEntity<Object> get(String path) {
         return get(path, null, null);
     }
 
-    public ResponseEntity<Object> get(String path, long userId) {
+    protected  ResponseEntity<Object> get(String path, long userId) {
         return get(path, userId, null);
     }
 
-    public ResponseEntity<Object> get(
+    protected  ResponseEntity<Object> get(
         String path,
         Long userId,
         @Nullable Map<String, Object> parameters
@@ -41,11 +41,11 @@ public class BaseClient {
         );
     }
 
-    public <T> ResponseEntity<Object> post(String path, T body) {
+    protected  <T> ResponseEntity<Object> post(String path, T body) {
         return post(path, null, null, body);
     }
 
-    public <T> ResponseEntity<Object> post(
+    protected  <T> ResponseEntity<Object> post(
         String path,
         long userId,
         T body
@@ -53,7 +53,7 @@ public class BaseClient {
         return post(path, userId, null, body);
     }
 
-    public <T> ResponseEntity<Object> post(
+    protected  <T> ResponseEntity<Object> post(
         String path,
         Long userId,
         @Nullable Map<String, Object> parameters,
@@ -68,11 +68,11 @@ public class BaseClient {
         );
     }
 
-    public <T> ResponseEntity<Object> put(String path, long userId, T body) {
+    protected  <T> ResponseEntity<Object> put(String path, long userId, T body) {
         return put(path, userId, null, body);
     }
 
-    public <T> ResponseEntity<Object> put(
+    protected  <T> ResponseEntity<Object> put(
         String path,
         long userId,
         @Nullable Map<String, Object> parameters,
@@ -87,15 +87,15 @@ public class BaseClient {
         );
     }
 
-    public <T> ResponseEntity<Object> patch(String path, T body) {
+    protected  <T> ResponseEntity<Object> patch(String path, T body) {
         return patch(path, null, null, body);
     }
 
-    public <T> ResponseEntity<Object> patch(String path, long userId) {
+    protected  <T> ResponseEntity<Object> patch(String path, long userId) {
         return patch(path, userId, null, null);
     }
 
-    public <T> ResponseEntity<Object> patch(
+    protected  <T> ResponseEntity<Object> patch(
         String path,
         long userId,
         T body
@@ -103,7 +103,7 @@ public class BaseClient {
         return patch(path, userId, null, body);
     }
 
-    public <T> ResponseEntity<Object> patch(
+    protected  <T> ResponseEntity<Object> patch(
         String path,
         Long userId,
         @Nullable Map<String, Object> parameters,
@@ -118,15 +118,15 @@ public class BaseClient {
         );
     }
 
-    public ResponseEntity<Object> delete(String path) {
+    protected  ResponseEntity<Object> delete(String path) {
         return delete(path, null, null);
     }
 
-    public ResponseEntity<Object> delete(String path, long userId) {
+    protected  ResponseEntity<Object> delete(String path, long userId) {
         return delete(path, userId, null);
     }
 
-    public ResponseEntity<Object> delete(
+    protected  ResponseEntity<Object> delete(
         String path,
         Long userId,
         @Nullable Map<String, Object> parameters
